@@ -366,7 +366,7 @@
 <!-- ══ PAGE ══ -->
 <div class="page">
 
-  <!-- ÉTAPE 1 -->
+  <!-- ÉTAPE 1 : Choix puissance -->
   <div class="step">
     <div class="step-head">
       <div class="step-num">1</div>
@@ -396,10 +396,29 @@
     </div>
   </div>
 
-  <!-- NOUVELLE ÉTAPE : batterie (exclusif) -->
-  <div class="step" id="stepBatterie" style="display: none;">
+  <!-- ⭐ NOUVEAU : ÉTAPE Monophasé / Triphasé (ajout uniquement) -->
+  <div class="step" id="stepPhase" style="display: none;">
     <div class="step-head">
       <div class="step-num">2</div>
+      <div class="step-title">Type d'alimentation</div>
+    </div>
+    <div class="step-body">
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="radio" name="phase" value="mono" id="phaseMono" checked> Monophasé
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="radio" name="phase" value="tri" id="phaseTri"> Triphasé (+10%)
+        </label>
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">Le prix augmente de 10% en triphasé (matériel, pose, prix de vente cible).</p>
+    </div>
+  </div>
+
+  <!-- ÉTAPE Batterie (exclusif) -->
+  <div class="step" id="stepBatterie" style="display: none;">
+    <div class="step-head">
+      <div class="step-num">3</div>
       <div class="step-title">Type de batterie (optionnel)</div>
     </div>
     <div class="step-body">
@@ -411,15 +430,14 @@
           <input type="radio" name="batterie" value="physique" id="battPhysique"> Batterie physique
         </label>
       </div>
-      <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">
-      </p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;"></p>
     </div>
   </div>
 
-  <!-- ÉTAPE 2 (ex-3) -->
+  <!-- ÉTAPE Saisie PV réel -->
   <div class="step">
     <div class="step-head">
-      <div class="step-num">3</div>
+      <div class="step-num">4</div>
       <div class="step-title">Saisir le prix de vente réel</div>
     </div>
     <div class="step-body">
@@ -444,10 +462,10 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 3 (ex-4) -->
+  <!-- ÉTAPE Résultat -->
   <div class="step">
     <div class="step-head">
-      <div class="step-num">4</div>
+      <div class="step-num">5</div>
       <div class="step-title">Résultat de la simulation</div>
     </div>
     <div class="step-body" id="result-body">
@@ -469,7 +487,7 @@
 
 <script>
   // ---------- DONNÉES TARIFAIRES (inchangées) ----------
-  const TARIFS = {
+  const TARIFS_BASE = {
     3:   { mat:5738,   pose:2525,  pr:3545,  cible:8863   },
     6:   { mat:8505,   pose:3400,  pr:5002,  cible:12505  },
     9:   { mat:12043,  pose:3900,  pr:6617,  cible:16543  },
@@ -497,38 +515,55 @@
   const parseVal = s => parseFloat(String(s).replace(/\s/g,'').replace('€','').replace(',','.')) || 0;
 
   let curPR = 0, curCible = 0, curPlancher = 0, cibleMC = 0;
+  let currentKw = null;
+  let baseData = null;
 
   const sel = document.getElementById('kwc');
+  const stepPhase = document.getElementById('stepPhase');
   const stepBatterie = document.getElementById('stepBatterie');
+  const radioMono = document.getElementById('phaseMono');
+  const radioTri = document.getElementById('phaseTri');
   const radioVirtuelle = document.getElementById('battVirtuelle');
   const radioPhysique = document.getElementById('battPhysique');
   const labelVirtuelle = document.getElementById('labelBattVirtuelle');
   const labelPhysique = document.getElementById('labelBattPhysique');
 
   // Remplir le select
-  Object.keys(TARIFS).forEach(k => {
+  Object.keys(TARIFS_BASE).forEach(k => {
     const o = document.createElement('option');
     o.value = k; o.textContent = k + ' kWc';
     sel.appendChild(o);
   });
 
-  function loadKwc(kw) {
-    const d = TARIFS[kw];
-    if (!d) {
-      document.getElementById('pills').style.display = 'none';
-      stepBatterie.style.display = 'none';
-      return;
-    }
-    curPR      = d.pr;
-    curCible   = d.cible;
-    cibleMC    = ((d.cible - d.pr) / d.cible) * 100;
-    curPlancher = Math.ceil(d.pr / (1 - MC_MIN));
+  // Appliquer la majoration triphasée (10%)
+  function applyTriphase(dataBase, isTri) {
+    if (!dataBase) return null;
+    const coeff = isTri ? 1.10 : 1.0;
+    return {
+      mat:    Math.round(dataBase.mat * coeff),
+      pose:   Math.round(dataBase.pose * coeff),
+      pr:     Math.round(dataBase.pr * coeff),
+      cible:  Math.round(dataBase.cible * coeff)
+    };
+  }
 
-    document.getElementById('v-mat').textContent      = fmt(d.mat);
-    document.getElementById('v-pose').textContent     = fmt(d.pose);
-    document.getElementById('v-cible').textContent    = fmt(d.cible);
+  function refreshPrices() {
+    if (!currentKw || !baseData) return;
+    const isTri = radioTri.checked;
+    const data = applyTriphase(baseData, isTri);
+    if (!data) return;
+
+    curPR      = data.pr;
+    curCible   = data.cible;
+    cibleMC    = ((data.cible - data.pr) / data.cible) * 100;
+    curPlancher = Math.ceil(data.pr / (1 - MC_MIN));
+
+    document.getElementById('v-mat').textContent      = fmt(data.mat);
+    document.getElementById('v-pose').textContent     = fmt(data.pose);
+    document.getElementById('v-cible').textContent    = fmt(data.cible);
     document.getElementById('v-cible-mc').textContent = 'MC de référence grille : ' + cibleMC.toFixed(1) + ' %';
     document.getElementById('pills').style.display    = 'grid';
+    stepPhase.style.display                           = 'block';
     stepBatterie.style.display                        = 'block';
 
     const pf = fmt(curPlancher);
@@ -536,14 +571,26 @@
     document.getElementById('plancher-val2').textContent = pf;
     document.getElementById('plancher-info').classList.add('show');
 
-    // Réinitialiser les radios
+    // Réinitialiser les radios batterie
     radioVirtuelle.checked = false;
     radioPhysique.checked = false;
     labelVirtuelle.style.display = 'flex';
     labelPhysique.style.display = 'flex';
+    compute();
   }
 
-  // Gestion de l’exclusivité
+  function loadKwc(kw) {
+    currentKw = kw;
+    baseData = TARIFS_BASE[kw];
+    if (!baseData) {
+      document.getElementById('pills').style.display = 'none';
+      stepPhase.style.display = 'none';
+      stepBatterie.style.display = 'none';
+      return;
+    }
+    refreshPrices();
+  }
+
   function updateBatteryVisibility() {
     if (radioVirtuelle.checked) {
       labelPhysique.style.display = 'none';
@@ -555,8 +602,12 @@
     }
   }
 
+  radioMono.addEventListener('change', () => { if (currentKw) refreshPrices(); });
+  radioTri.addEventListener('change', () => { if (currentKw) refreshPrices(); });
   radioVirtuelle.addEventListener('change', updateBatteryVisibility);
   radioPhysique.addEventListener('change', updateBatteryVisibility);
+  sel.addEventListener('change', () => { loadKwc(sel.value); compute(); });
+  document.getElementById('pv-reel').addEventListener('input', compute);
 
   function resetPV() {
     if (!curCible) return;
@@ -639,9 +690,6 @@
       </div>
     `;
   }
-
-  sel.addEventListener('change', () => { loadKwc(sel.value); compute(); });
-  document.getElementById('pv-reel').addEventListener('input', compute);
 </script>
 </body>
 </html>
