@@ -388,7 +388,7 @@
           <div class="pill-val" id="v-pose">—</div>
         </div>
         <div class="pill cible">
-          <div class="pill-label">PV cible</div>
+          <div class="pill-label">Prix Vente cible</div>
           <div class="pill-val" id="v-cible">—</div>
           <div class="pill-sub" id="v-cible-mc">MC de référence grille</div>
         </div>
@@ -440,7 +440,7 @@
         </div>
       </div>
 
-      <button class="btn-cible" onclick="resetPV()">↩ Revenir au PV cible de la grille</button>
+      <button class="btn-cible" onclick="resetPV()">↩ Revenir au Prix de Vente cible de la grille</button>
     </div>
   </div>
 
@@ -600,11 +600,11 @@
     if (pv >= curCible) {
       tone = 'ok'; icon = '✅';
       msg = Math.abs(ecart) < 1
-        ? 'Vente exactement au PV cible — parfait !'
-        : '+' + Math.round(ecart).toLocaleString('fr-FR') + ' € au-dessus du PV cible — excellent !';
+        ? 'Vente exactement au Prix Vente cible — parfait !'
+        : '+' + Math.round(ecart).toLocaleString('fr-FR') + ' € au-dessus du Prix Vente cible — excellent !';
     } else {
       tone = 'warn'; icon = '⚠️';
-      msg = Math.abs(Math.round(ecart)).toLocaleString('fr-FR') + ' € sous le PV cible — à renégocier.';
+      msg = Math.abs(Math.round(ecart)).toLocaleString('fr-FR') + ' € sous le Prix Vente cible — à renégocier.';
     }
 
     const ec = ecart >= 0 ? 'c-ok' : 'c-warn';
@@ -618,7 +618,7 @@
           </div>
           <div class="result-right">
             <div>
-              <div class="result-kpi-label">Écart vs PV cible</div>
+              <div class="result-kpi-label">Écart vs Prix Vente cible</div>
               <div class="result-kpi-val ${ec}">${fmtS(ecart)}</div>
             </div>
             <div>
@@ -632,7 +632,7 @@
         </div>
         <div class="bar-labels">
           <span class="bl">0 %</span>
-          <span class="bc">▲ PV cible ${cibleMC.toFixed(1)} %</span>
+          <span class="bc">▲ Prix Vente cible ${cibleMC.toFixed(1)} %</span>
           <span class="bl">100 %</span>
         </div>
         <div class="status-msg">${icon} ${msg}</div>
