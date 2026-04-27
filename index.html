@@ -5,7 +5,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="android-chrome-192x192.png">
-</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Planète+ — Simulateur commercial</title>
@@ -359,9 +358,7 @@
 
 <div class="topbar">
   <div class="logo-wrap">
-    <!-- Logo avec une taille plus grande -->
     <img src="Book vente particulier.pdf.png" alt="planète+" class="logo-img" style="width: 100px; height: auto;">
-    <!-- Supprimer le div logo-tag car le texte est déjà dans l'image -->
   </div>
   <div class="topbar-badge">Simulateur commercial</div>
 </div>
@@ -399,10 +396,30 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 2 -->
-  <div class="step">
+  <!-- NOUVELLE ÉTAPE : batterie (exclusif) -->
+  <div class="step" id="stepBatterie" style="display: none;">
     <div class="step-head">
       <div class="step-num">2</div>
+      <div class="step-title">Type de batterie (optionnel)</div>
+    </div>
+    <div class="step-body">
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+        <label id="labelBattVirtuelle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="radio" name="batterie" value="virtuelle" id="battVirtuelle"> Batterie virtuelle
+        </label>
+        <label id="labelBattPhysique" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="radio" name="batterie" value="physique" id="battPhysique"> Batterie physique
+        </label>
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">
+      </p>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 (ex-3) -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">3</div>
       <div class="step-title">Saisir le prix de vente réel</div>
     </div>
     <div class="step-body">
@@ -427,10 +444,10 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 3 -->
+  <!-- ÉTAPE 3 (ex-4) -->
   <div class="step">
     <div class="step-head">
-      <div class="step-num">3</div>
+      <div class="step-num">4</div>
       <div class="step-title">Résultat de la simulation</div>
     </div>
     <div class="step-body" id="result-body">
@@ -451,6 +468,7 @@
 </div>
 
 <script>
+  // ---------- DONNÉES TARIFAIRES (inchangées) ----------
   const TARIFS = {
     3:   { mat:5738,   pose:2525,  pr:3545,  cible:8863   },
     6:   { mat:8505,   pose:3400,  pr:5002,  cible:12505  },
@@ -481,6 +499,13 @@
   let curPR = 0, curCible = 0, curPlancher = 0, cibleMC = 0;
 
   const sel = document.getElementById('kwc');
+  const stepBatterie = document.getElementById('stepBatterie');
+  const radioVirtuelle = document.getElementById('battVirtuelle');
+  const radioPhysique = document.getElementById('battPhysique');
+  const labelVirtuelle = document.getElementById('labelBattVirtuelle');
+  const labelPhysique = document.getElementById('labelBattPhysique');
+
+  // Remplir le select
   Object.keys(TARIFS).forEach(k => {
     const o = document.createElement('option');
     o.value = k; o.textContent = k + ' kWc';
@@ -489,7 +514,11 @@
 
   function loadKwc(kw) {
     const d = TARIFS[kw];
-    if (!d) { document.getElementById('pills').style.display = 'none'; return; }
+    if (!d) {
+      document.getElementById('pills').style.display = 'none';
+      stepBatterie.style.display = 'none';
+      return;
+    }
     curPR      = d.pr;
     curCible   = d.cible;
     cibleMC    = ((d.cible - d.pr) / d.cible) * 100;
@@ -500,12 +529,34 @@
     document.getElementById('v-cible').textContent    = fmt(d.cible);
     document.getElementById('v-cible-mc').textContent = 'MC de référence grille : ' + cibleMC.toFixed(1) + ' %';
     document.getElementById('pills').style.display    = 'grid';
+    stepBatterie.style.display                        = 'block';
 
     const pf = fmt(curPlancher);
     document.getElementById('plancher-val').textContent  = pf;
     document.getElementById('plancher-val2').textContent = pf;
     document.getElementById('plancher-info').classList.add('show');
+
+    // Réinitialiser les radios
+    radioVirtuelle.checked = false;
+    radioPhysique.checked = false;
+    labelVirtuelle.style.display = 'flex';
+    labelPhysique.style.display = 'flex';
   }
+
+  // Gestion de l’exclusivité
+  function updateBatteryVisibility() {
+    if (radioVirtuelle.checked) {
+      labelPhysique.style.display = 'none';
+    } else if (radioPhysique.checked) {
+      labelVirtuelle.style.display = 'none';
+    } else {
+      labelVirtuelle.style.display = 'flex';
+      labelPhysique.style.display = 'flex';
+    }
+  }
+
+  radioVirtuelle.addEventListener('change', updateBatteryVisibility);
+  radioPhysique.addEventListener('change', updateBatteryVisibility);
 
   function resetPV() {
     if (!curCible) return;
