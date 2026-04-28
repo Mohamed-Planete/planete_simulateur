@@ -10,7 +10,7 @@
   <title>Planète+ — Simulateur commercial</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ── VARIABLES PLANETE+ (défaut) ── */
+    /* ── VARIABLES PLANETE+ ── */
     :root {
       --blue:        #2397BD;
       --blue-dark:   #155970;
@@ -55,11 +55,11 @@
       color: var(--text);
     }
 
-    /* TOPBAR améliorée */
+    /* TOPBAR avec logo très large */
     .topbar {
       background: var(--blue-dark);
       padding: 0 20px;
-      height: 80px;  /* un peu plus haut pour mieux accueillir le logo */
+      height: 110px;  /* agrandi pour accueillir le grand logo */
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -74,29 +74,27 @@
       gap: 12px;
     }
 
-    /* Logo plus grand, avec coins arrondis et ombre douce */
+    /* Logo très grand, arrondi, ombre */
     .logo-img {
-      height: 52px;           /* taille augmentée */
+      height: 80px;          /* taille considérablement augmentée */
       width: auto;
-      border-radius: 16px;    /* coins arrondis */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      background: white;      /* fond blanc pour les zones transparentes */
-      padding: 4px;           /* petit espace interne */
+      border-radius: 20px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      background: white;
+      padding: 6px;
       transition: transform 0.2s;
     }
     .logo-img:hover {
       transform: scale(1.02);
     }
 
-    /* badge texte à droite */
     .topbar-badge {
       background: rgba(255,255,255,0.15);
       color: rgba(255,255,255,0.9);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 6px 14px;
+      padding: 8px 18px;
       border-radius: 40px;
-      letter-spacing: 0.3px;
       backdrop-filter: blur(2px);
     }
 
@@ -244,6 +242,24 @@
     }
     .result-card.ok   .bar-fill { background: var(--green); }
     .result-card.warn .bar-fill { background: var(--warn-bd); }
+
+    /* Barre sans 0%, 100% et sans flèche */
+    .bar-labels {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 4px;
+      color: var(--text-muted);
+    }
+    .bar-labels .cible-label {
+      background: rgba(0,0,0,0.05);
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+    .result-card.ok .bar-labels .cible-label { background: rgba(175,205,93,0.2); color: var(--green-dark); }
+    .result-card.warn .bar-labels .cible-label { background: rgba(240,180,41,0.2); color: var(--warn-text); }
+
     .status-msg {
       font-size: 13px; font-weight: 600;
       padding: 12px 16px; border-radius: var(--radius-sm);
@@ -253,7 +269,7 @@
     .result-card.ok   .status-msg { background: rgba(175,205,93,0.18);  color: var(--ok-text);   }
     .result-card.warn .status-msg { background: rgba(240,180,41,0.18);  color: var(--warn-text); }
 
-    /* Commission block */
+    /* Commission block dynamique */
     .commission-block {
       margin-top: 16px;
       padding: 14px 16px;
@@ -265,19 +281,55 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
+      transition: border-left-color 0.3s, color 0.3s;
+    }
+    .commission-block.ok {
+      border-left-color: var(--green-dark);
+      background: #eef5e6;
+    }
+    .commission-block.ok .commission-label,
+    .commission-block.ok .commission-montant {
+      color: var(--green-dark);
+    }
+    .commission-block.warn {
+      border-left-color: var(--warn-bd);
+      background: #fff4e6;
+    }
+    .commission-block.warn .commission-label,
+    .commission-block.warn .commission-montant {
+      color: var(--warn-text);
     }
     .commission-label {
       font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: var(--commission);
     }
     .commission-montant {
       font-size: 24px;
       font-weight: 700;
-      color: var(--commission);
+      letter-spacing: -0.5px;
     }
+    .commission-taux, .commission-note {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Espacement des radios batterie */
+    .step-body label {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;         /* écart entre la case et le texte */
+      cursor: pointer;
+      margin-right: 20px;
+    }
+    .step-body input[type="radio"] {
+      margin: 0;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--blue);
+    }
+
     .commission-help {
       cursor: help;
       border-bottom: 1px dashed var(--commission);
@@ -308,18 +360,17 @@
       text-align: center; padding: 30px 20px;
       color: var(--text-sub); font-size: 13px; font-weight: 500;
     }
-    @media (max-width: 400px) {
+    @media (max-width: 500px) {
       .result-mc-val { font-size: 40px; }
       .pv-input-wrap input { font-size: 20px; height: 56px; }
-      .logo-img { height: 44px; }
-      .topbar { height: 70px; }
+      .logo-img { height: 60px; }
+      .topbar { height: 90px; }
     }
   </style>
 </head>
 <body>
 <div class="topbar">
   <div class="logo-wrap">
-    <!-- Logo amélioré : plus grand, arrondi, ombre -->
     <img src="Book vente particulier.pdf.png" alt="planète+" class="logo-img">
   </div>
   <div class="topbar-badge">Simulateur commercial</div>
@@ -351,11 +402,11 @@
     </div>
   </div>
 
-  <!-- ÉTAPE 3 : Batterie -->
+  <!-- ÉTAPE 3 : Batterie (radio avec meilleur espacement) -->
   <div class="step" id="stepBatterie" style="display: none;">
     <div class="step-head"><div class="step-num">3</div><div class="step-title">Type de batterie (optionnel)</div></div>
     <div class="step-body">
-      <div style="display: flex; gap: 20px;">
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
         <label id="labelBattVirtuelle"><input type="radio" name="batterie" value="virtuelle" id="battVirtuelle"> Batterie virtuelle</label>
         <label id="labelBattPhysique"><input type="radio" name="batterie" value="physique" id="battPhysique"> Batterie physique</label>
       </div>
@@ -482,9 +533,18 @@
           <div style="text-align:right;"><div class="result-kpi-label">Écart vs cible</div><div class="result-kpi-val ${ec}">${fmtS(ecart)}</div><div class="result-kpi-label" style="margin-top:8px;">Écart MC</div><div class="result-kpi-val ${ec}">${diffPts>=0?'+':''}${diffPts.toFixed(1)} pts</div></div>
         </div>
         <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
-        <div class="bar-labels"><span class="bl">0 %</span><span class="bc">▲ cible ${cibleMC.toFixed(1)} %</span><span class="bl">100 %</span></div>
+        <div class="bar-labels">
+          <span class="cible-label">Prix de Vente cible ${cibleMC.toFixed(1)} %</span>
+        </div>
         <div class="status-msg">${icon} ${msg}</div>
-        <div class="commission-block"><div><div class="commission-label">💰 Commission commerciale</div><div class="commission-taux">Taux : ${rateLabel}</div><div class="commission-note">(sur marge ${Math.round(marge).toLocaleString('fr-FR')} €)</div></div><div class="commission-montant">${commission.toLocaleString('fr-FR')} €</div></div>
+        <div class="commission-block ${tone}">
+          <div>
+            <div class="commission-label">💰 Commission commerciale</div>
+            <div class="commission-taux">Taux : ${rateLabel}</div>
+            <div class="commission-note">(sur marge ${Math.round(marge).toLocaleString('fr-FR')} €)</div>
+          </div>
+          <div class="commission-montant">${commission.toLocaleString('fr-FR')} €</div>
+        </div>
       </div>`;
   }
 </script>
