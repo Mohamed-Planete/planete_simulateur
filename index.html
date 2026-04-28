@@ -10,6 +10,7 @@
   <title>Planète+ — Simulateur commercial</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Firebase Auth - version compatible avec un simple fichier HTML -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
@@ -70,6 +71,7 @@
       color: var(--text);
     }
 
+    /* LOGIN */
     .login-page {
       position: fixed;
       inset: 0;
@@ -381,6 +383,7 @@
 </head>
 
 <body>
+  <!-- Page de connexion obligatoire -->
   <div id="loginPage" class="login-page">
     <div class="login-card">
       <h1>Connexion Planète+</h1>
@@ -392,6 +395,7 @@
     </div>
   </div>
 
+  <!-- Application protégée -->
   <div id="app" style="display:none;">
     <div class="topbar">
       <div class="logo-wrap">
@@ -404,6 +408,7 @@
     </div>
 
     <div class="page">
+      <!-- ÉTAPE 1 : Puissance -->
       <div class="step">
         <div class="step-head"><div class="step-num">1</div><div class="step-title">Choisir la puissance installée</div></div>
         <div class="step-body">
@@ -416,6 +421,7 @@
         </div>
       </div>
 
+      <!-- ÉTAPE 2 : Phase (mono/tri) -->
       <div class="step" id="stepPhase" style="display: none;">
         <div class="step-head"><div class="step-num">2</div><div class="step-title">Type d'alimentation</div></div>
         <div class="step-body">
@@ -427,6 +433,7 @@
         </div>
       </div>
 
+      <!-- ÉTAPE 3 : Saisie PV réel -->
       <div class="step">
         <div class="step-head"><div class="step-num">3</div><div class="step-title">Saisir le prix de vente réel</div></div>
         <div class="step-body">
@@ -443,6 +450,7 @@
         </div>
       </div>
 
+      <!-- ÉTAPE 4 : Résultat -->
       <div class="step">
         <div class="step-head"><div class="step-num">4</div><div class="step-title">Résultat de la simulation</div></div>
         <div class="step-body" id="result-body"><div class="placeholder"><div class="placeholder-icon">☀️</div>Sélectionnez une puissance et saisissez un prix de vente.</div></div>
@@ -451,6 +459,8 @@
       <div class="foot">
         <span>Grille tarifaire PLANETE+</span><div class="foot-dot"></div>
         <span>3 à 250 kWc</span><div class="foot-dot"></div>
+        <span>Plancher MC 45 %</span><div class="foot-dot"></div>
+        <span class="commission-help relative">💰 Commission commerciale
           <div class="commission-grid">
             <strong>Grille variable</strong><br>&lt;45% : 0%<br>45-49,99% : 4%<br>50-59,99% : 6%<br>60-69,99% : 8%<br>70-79,99% : 10%<br>≥80% : 12%<br><span style="font-size:9px;">(% de la MC)</span>
           </div>
@@ -460,6 +470,7 @@
   </div>
 
   <script>
+    // Authentification Firebase
     function login() {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
@@ -495,6 +506,7 @@
       }
     });
 
+    // DONNÉES TARIFAIRES
     const TARIFS_BASE = {
       3:{mat:5738,pose:2525,pr:3545,cible:8863},6:{mat:8505,pose:3400,pr:5002,cible:12505},9:{mat:12043,pose:3900,pr:6617,cible:16543},
       12:{mat:16358,pose:4400,pr:8543,cible:21358},15:{mat:17440,pose:4460,pr:9000,cible:22500},18:{mat:21333,pose:5210,pr:9500,cible:27143},
@@ -669,6 +681,7 @@
         </div>`;
     }
 
+    // Service worker PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
