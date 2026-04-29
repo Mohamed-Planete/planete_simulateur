@@ -764,16 +764,33 @@
 
 <body>
   <!-- Page de connexion obligatoire -->
-  <div id="loginPage" class="login-page">
-    <div class="login-card">
-      <h1>Connexion Planète+</h1>
-      <p>Accès réservé aux utilisateurs autorisés.</p>
-      <input id="email" type="email" placeholder="Email" autocomplete="email">
-      <input id="password" type="password" placeholder="Mot de passe" autocomplete="current-password">
-      <button type="button" onclick="login()">Se connecter</button>
-      <p id="loginError" class="login-error"></p>
+ <div id="loginPage" class="login-page">
+  <div class="login-card">
+    <div class="login-logo-wrap">
+      <img src="Logo_Planete.png" alt="Planète+" class="login-logo">
     </div>
+
+    <div class="login-kicker">Espace interne</div>
+    <h1>Simulateur commercial</h1>
+    <p>Connectez-vous avec votre compte autorisé Planète+.</p>
+
+    <div class="login-field">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="prenom.nom@planete-plus.fr" autocomplete="email">
+    </div>
+
+    <div class="login-field">
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" placeholder="Votre mot de passe" autocomplete="current-password">
+    </div>
+
+    <button type="button" onclick="login()">Se connecter</button>
+    <p id="loginError" class="login-error"></p>
+
+    <div class="login-footer">Accès réservé aux utilisateurs autorisés</div>
   </div>
+</div>
+
 
   <!-- Application protégée -->
   <div id="app" style="display:none;">
