@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Planète+ — Simulateur commercial</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -35,946 +35,946 @@
 
   <style>
     :root {
-      --blue: #2397BD;
-      --blue-dark: #155970;
-      --blue-deep: #0d2b36;
-      --blue-pale: #e8f7fc;
-      --green-dark: #2c6e2c;
-      --green-light: #7cb518;
-      --danger-color: #c73d23;
-      --danger-bg: #fff4f2;
-      --ok-bg: #f1f8e8;
-      --success-bg: #e9f4e9;
-      --warn-bg: #fff8eb;
-      --warn-bd: #f0b429;
-      --warn-text: #9a5608;
-      --white: #ffffff;
-      --bg: #f4f9fb;
-      --surface: #ffffff;
-      --surface-soft: #f8fcfd;
-      --border: #d6e9f1;
-      --border-strong: #bad8e4;
-      --text: #0d2b36;
-      --text-sub: #4f7f92;
-      --text-muted: #87aebb;
-      --block-bg: #fff1f1;
-      --block-bd: #d94b4b;
-      --block-text: #851c1c;
-      --shadow-sm: 0 8px 22px rgba(13,43,54,0.06);
-      --shadow-md: 0 16px 38px rgba(13,43,54,0.10);
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
+      --blue:#2397BD;
+      --blue-dark:#155970;
+      --blue-deep:#0d2b36;
+      --blue-pale:#e8f7fc;
+      --green:#2c7a32;
+      --green-soft:#f0faef;
+      --lime:#7cb518;
+      --orange:#E68A2E;
+      --orange-soft:#fff7ea;
+      --red:#c73d23;
+      --red-soft:#fff3f0;
+      --bg:#f4f9fb;
+      --surface:#ffffff;
+      --surface-soft:#f8fcfd;
+      --border:#d6e9f1;
+      --border-strong:#bad8e4;
+      --text:#0d2b36;
+      --text-sub:#4f7f92;
+      --text-muted:#83adbd;
+      --shadow:0 8px 24px rgba(13,43,54,0.07);
+      --radius-sm:8px;
+      --radius-md:12px;
+      --radius-lg:18px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family:'Poppins', sans-serif;
+      min-height:100vh;
+      color:var(--text);
       background:
-        linear-gradient(180deg, rgba(232,247,252,0.75) 0%, rgba(244,249,251,1) 280px),
+        linear-gradient(180deg, rgba(232,247,252,0.82) 0%, rgba(244,249,251,1) 310px),
         var(--bg);
-      min-height: 100vh;
-      color: var(--text);
     }
 
+    button, input { font-family:inherit; }
+    button { cursor:pointer; }
+
     .login-page {
-      position: fixed;
-      inset: 0;
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
       background:
-        radial-gradient(circle at 18% 12%, rgba(47,198,248,0.18), transparent 34%),
+        radial-gradient(circle at 22% 14%, rgba(47,198,248,0.18), transparent 32%),
         linear-gradient(145deg, var(--blue-dark), var(--blue-deep));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
     }
 
     .login-card {
-      width: 100%;
-      max-width: 420px;
-      background: var(--surface);
-      border-radius: 22px;
-      padding: 34px 30px 30px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.26);
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.55);
-    }
-
-    .login-logo-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 22px;
+      width:100%;
+      max-width:420px;
+      padding:34px 30px 30px;
+      background:var(--surface);
+      border:1px solid rgba(255,255,255,0.55);
+      border-radius:22px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.26);
+      text-align:center;
     }
 
     .login-logo {
-      width: 235px;
-      max-width: 82%;
-      height: auto;
-      display: block;
-      object-fit: contain;
+      width:238px;
+      max-width:82%;
+      height:auto;
+      object-fit:contain;
+      margin-bottom:22px;
     }
 
     .login-kicker {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: var(--blue-pale);
-      color: var(--blue-dark);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      display:inline-flex;
+      margin-bottom:10px;
+      padding:5px 12px;
+      border-radius:999px;
+      background:var(--blue-pale);
+      color:var(--blue-dark);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
     }
 
     .login-card h1 {
-      font-size: 25px;
-      color: var(--blue-dark);
-      margin-bottom: 8px;
-      line-height: 1.15;
+      color:var(--blue-dark);
+      font-size:25px;
+      line-height:1.15;
+      margin-bottom:8px;
     }
 
     .login-card p {
-      font-size: 13px;
-      color: var(--text-sub);
-      margin-bottom: 24px;
-      line-height: 1.5;
+      color:var(--text-sub);
+      font-size:13px;
+      line-height:1.5;
+      margin-bottom:24px;
     }
 
     .login-field {
-      text-align: left;
-      margin-bottom: 12px;
+      text-align:left;
+      margin-bottom:12px;
     }
 
     .login-field label {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text-sub);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+      display:block;
+      margin-bottom:6px;
+      color:var(--text-sub);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:0.4px;
+      text-transform:uppercase;
     }
 
     .login-card input {
-      width: 100%;
-      height: 50px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 0 14px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      background: var(--surface-soft);
-      color: var(--text);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      width:100%;
+      height:50px;
+      padding:0 14px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      background:var(--surface-soft);
+      color:var(--text);
+      font-size:14px;
+      transition:border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
 
     .login-card input:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px rgba(35,151,189,0.14);
-      background: white;
+      outline:none;
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(35,151,189,0.14);
+      background:white;
     }
 
     .login-card button {
-      width: 100%;
-      height: 50px;
-      border: none;
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 6px;
-      box-shadow: 0 10px 22px rgba(35,151,189,0.24);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width:100%;
+      height:50px;
+      margin-top:6px;
+      border:0;
+      border-radius:var(--radius-md);
+      background:linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color:white;
+      font-size:14px;
+      font-weight:800;
+      box-shadow:0 10px 22px rgba(35,151,189,0.24);
+      transition:transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .login-card button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 28px rgba(35,151,189,0.30);
+      transform:translateY(-1px);
+      box-shadow:0 14px 28px rgba(35,151,189,0.30);
     }
 
     .login-error {
-      color: var(--danger-color) !important;
-      font-size: 12px !important;
-      margin-top: 12px !important;
-      margin-bottom: 0 !important;
-      min-height: 18px;
+      min-height:18px;
+      margin:12px 0 0 !important;
+      color:var(--red) !important;
+      font-size:12px !important;
     }
 
     .login-footer {
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 500;
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid var(--border);
+      color:var(--text-muted);
+      font-size:11px;
+      font-weight:500;
     }
 
     .topbar {
-      background: rgba(21,89,112,0.98);
-      padding: 0 24px;
-      min-height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 8px 24px rgba(13,43,54,0.16);
-      border-bottom: 1px solid rgba(255,255,255,0.10);
+      position:sticky;
+      top:0;
+      z-index:100;
+      min-height:58px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:0 24px;
+      background:rgba(21,89,112,0.98);
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      box-shadow:0 8px 24px rgba(13,43,54,0.16);
+      backdrop-filter:blur(12px);
     }
 
     .logo-img {
-      height: 38px;
-      width: auto;
-      max-width: 142px;
-      object-fit: contain;
-      border-radius: 10px;
-      background: white;
-      padding: 6px 10px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+      height:38px;
+      max-width:142px;
+      width:auto;
+      padding:6px 10px;
+      object-fit:contain;
+      border-radius:10px;
+      background:white;
+      box-shadow:0 6px 18px rgba(0,0,0,0.14);
     }
 
     .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
 
     .topbar-badge,
     .logout-btn {
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 999px;
+      border-radius:999px;
+      color:white;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
     }
 
     .topbar-badge {
-      background: rgba(255,255,255,0.13);
-      padding: 7px 14px;
-      border: 1px solid rgba(255,255,255,0.14);
+      padding:7px 14px;
+      background:rgba(255,255,255,0.13);
+      border:1px solid rgba(255,255,255,0.14);
     }
 
     .logout-btn {
-      border: 1px solid rgba(255,255,255,0.24);
-      background: rgba(255,255,255,0.08);
-      padding: 7px 13px;
-      cursor: pointer;
+      padding:7px 13px;
+      border:1px solid rgba(255,255,255,0.24);
+      background:rgba(255,255,255,0.08);
     }
 
     .logout-btn:hover {
-      background: rgba(255,255,255,0.16);
-      border-color: rgba(255,255,255,0.36);
+      background:rgba(255,255,255,0.16);
+      border-color:rgba(255,255,255,0.36);
     }
 
     .summary-bar {
-      position: sticky;
-      top: 58px;
-      z-index: 80;
-      background: rgba(244,249,251,0.92);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
-      display: none;
+      position:sticky;
+      top:58px;
+      z-index:80;
+      display:none;
+      background:rgba(244,249,251,0.92);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(12px);
     }
 
-    .summary-bar.show { display: block; }
+    .summary-bar.show { display:block; }
 
     .summary-inner {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 10px 16px;
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 10px;
+      max-width:1180px;
+      margin:0 auto;
+      padding:10px 16px;
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0, 1fr));
+      gap:10px;
     }
 
     .summary-item {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 9px 11px;
-      min-width: 0;
+      min-width:0;
+      padding:9px 11px;
+      background:white;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
     }
 
     .summary-label {
-      color: var(--text-sub);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.45px;
-      text-transform: uppercase;
-      margin-bottom: 3px;
+      margin-bottom:3px;
+      color:var(--text-sub);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:0.45px;
+      text-transform:uppercase;
     }
 
     .summary-value {
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color:var(--text);
+      font-size:14px;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .summary-value.status-danger { color: var(--danger-color); }
-    .summary-value.status-ok { color: var(--green-light); }
-    .summary-value.status-success { color: var(--green-dark); }
+    .status-danger { color:var(--red) !important; }
+    .status-ok { color:var(--lime) !important; }
+    .status-success { color:var(--green) !important; }
 
     .page {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 22px 16px 96px;
+      max-width:1180px;
+      margin:0 auto;
+      padding:24px 16px 92px;
     }
 
-    .step {
-      background: rgba(255,255,255,0.96);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      margin-bottom: 14px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
+    .workspace {
+      display:grid;
+      grid-template-columns:minmax(0, 500px) minmax(0, 1fr);
+      gap:18px;
+      align-items:start;
     }
 
-    .step-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      background: linear-gradient(90deg, #f3fbfe, #ffffff);
-      border-bottom: 1px solid var(--border);
+    .panel,
+    .result-card {
+      background:rgba(255,255,255,0.96);
+      border:1px solid var(--border);
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .panel-head {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 18px;
+      background:linear-gradient(90deg, #f3fbfe, #ffffff);
+      border-bottom:1px solid var(--border);
     }
 
     .step-num {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--blue);
-      color: white;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 6px 14px rgba(35,151,189,0.20);
+      width:28px;
+      height:28px;
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      background:var(--blue);
+      color:white;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:0 6px 14px rgba(35,151,189,0.20);
     }
 
-    .step-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--blue-dark);
+    .panel-title {
+      color:var(--blue-dark);
+      font-size:14px;
+      font-weight:800;
     }
 
-    .step-body { padding: 18px; }
-
-    .custom-kwc-wrap {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: var(--radius-md);
-      background: var(--surface-soft);
-      border: 1px solid var(--border);
+    .panel-body {
+      padding:18px;
+      display:grid;
+      gap:14px;
     }
 
-    .step-body > .custom-kwc-wrap:first-child { margin-top: 0; }
-
-    .custom-kwc-wrap label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--text-sub);
-      margin-bottom: 8px;
+    .field-card {
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      background:var(--surface-soft);
     }
 
-    .custom-kwc-wrap input,
-    .pv-input-wrap input {
-      font-family: 'Poppins', sans-serif;
-      color: var(--text);
-      background: white;
-      border: 1px solid var(--border-strong);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    .field-label {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+      color:var(--text-sub);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:0.4px;
+      text-transform:uppercase;
     }
 
-    .custom-kwc-wrap input:focus,
-    .pv-input-wrap input:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px rgba(35,151,189,0.13);
-      background: white;
+    .field-badge {
+      display:none;
+      padding:3px 8px;
+      border-radius:999px;
+      background:var(--orange-soft);
+      color:#a65d0d;
+      font-size:10px;
+      font-weight:800;
+      text-transform:none;
+      letter-spacing:0;
     }
 
-    .custom-kwc-wrap input {
-      width: 100%;
-      height: 48px;
-      border-radius: var(--radius-md);
-      padding: 0 14px;
-      font-size: 16px;
-      font-weight: 700;
+    .field-badge.show { display:inline-flex; }
+
+    .text-input {
+      width:100%;
+      height:52px;
+      padding:0 14px;
+      border:1.5px solid var(--border-strong);
+      border-radius:var(--radius-md);
+      background:white;
+      color:var(--text);
+      font-size:18px;
+      font-weight:800;
+      transition:border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .kwc-method {
-      margin-top: 8px;
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.4;
+    .text-input:focus {
+      outline:none;
+      border-color:var(--blue);
+      box-shadow:0 0 0 4px rgba(35,151,189,0.13);
     }
 
-    .option-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
+    .price-input-wrap { position:relative; }
+
+    .price-input-wrap .text-input {
+      height:64px;
+      padding-right:58px;
+      font-size:25px;
     }
 
-    .option-title {
-      color: var(--blue-dark);
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 4px;
+    .price-input-wrap .text-input.blocked {
+      border-color:var(--red);
+      background:var(--red-soft);
+      color:#851c1c;
     }
 
-    .option-note {
-      color: var(--text-muted);
-      font-size: 11px;
-      line-height: 1.45;
+    .clear-btn {
+      position:absolute;
+      right:14px;
+      top:50%;
+      width:32px;
+      height:32px;
+      transform:translateY(-50%);
+      border:1px solid var(--border);
+      border-radius:50%;
+      background:#e8f2f6;
+      color:var(--text-sub);
+      font-size:13px;
     }
 
-    .switch {
-      position: relative;
-      flex: 0 0 auto;
-      width: 48px;
-      height: 28px;
-      display: inline-block;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .switch-slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background: #dbeaf0;
-      border: 1px solid var(--border-strong);
-      border-radius: 999px;
-      transition: background 0.2s ease, border-color 0.2s ease;
-    }
-
-    .switch-slider::before {
-      content: '';
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      left: 2px;
-      top: 2px;
-      background: white;
-      border-radius: 50%;
-      box-shadow: 0 2px 7px rgba(13,43,54,0.18);
-      transition: transform 0.2s ease;
-    }
-
-    .switch input:checked + .switch-slider {
-      background: var(--blue);
-      border-color: var(--blue);
-    }
-
-    .switch input:checked + .switch-slider::before {
-      transform: translateX(20px);
+    .clear-btn:hover {
+      background:#dcecf2;
+      color:var(--blue-dark);
     }
 
     .segmented {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
 
     .phase-option {
-      margin: 0 !important;
-      padding: 13px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: white;
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 700;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-      cursor: pointer;
+      position:relative;
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      background:white;
+      color:var(--text);
+      font-size:14px;
+      font-weight:800;
+      transition:border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      cursor:pointer;
     }
 
     .phase-option input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
     }
 
     .phase-option.active {
-      border-color: var(--blue);
-      background: var(--blue-pale);
-      box-shadow: 0 0 0 3px rgba(35,151,189,0.10);
-      color: var(--blue-dark);
+      border-color:var(--blue);
+      background:var(--blue-pale);
+      box-shadow:0 0 0 3px rgba(35,151,189,0.10);
+      color:var(--blue-dark);
     }
 
-    .pills {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 16px;
+    .option-card {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
     }
 
-    .pill {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
+    .option-title {
+      color:var(--blue-dark);
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:4px;
     }
 
-    .pill.cible {
-      grid-column: span 2;
-      background: linear-gradient(180deg, #f7fbec, #ffffff);
-      border-color: #AFCD5D;
+    .option-note {
+      color:var(--text-muted);
+      font-size:11px;
+      line-height:1.45;
     }
 
-    .pill-label {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-sub);
-      margin-bottom: 5px;
+    .switch {
+      position:relative;
+      flex:0 0 auto;
+      width:48px;
+      height:28px;
+      display:inline-block;
     }
 
-    .pill.cible .pill-label { color: #647c29; }
-    .pill-val { font-size: 18px; font-weight: 700; color: var(--text); }
-    .pill.cible .pill-val { font-size: 24px; color: #5f7b18; }
-    .pill-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
-
-    .pv-input-wrap { position: relative; }
-
-    .pv-input-wrap input {
-      width: 100%;
-      height: 62px;
-      font-size: 24px;
-      font-weight: 700;
-      border: 1.5px solid var(--border-strong);
-      border-radius: var(--radius-md);
-      padding: 0 58px 0 18px;
+    .switch input {
+      opacity:0;
+      width:0;
+      height:0;
     }
 
-    .pv-input-wrap input.blocked {
-      border-color: var(--block-bd);
-      background: var(--block-bg);
-      color: var(--block-text);
+    .switch-slider {
+      position:absolute;
+      inset:0;
+      background:#dbeaf0;
+      border:1px solid var(--border-strong);
+      border-radius:999px;
+      transition:background 0.2s ease, border-color 0.2s ease;
     }
 
-    .pv-clear {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #e8f2f6;
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      cursor: pointer;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .switch-slider::before {
+      content:'';
+      position:absolute;
+      width:22px;
+      height:22px;
+      left:2px;
+      top:2px;
+      background:white;
+      border-radius:50%;
+      box-shadow:0 2px 7px rgba(13,43,54,0.18);
+      transition:transform 0.2s ease;
     }
 
-    .btn-cible {
-      width: 100%;
-      margin-top: 10px;
-      height: 44px;
-      border-radius: var(--radius-md);
-      border: 1px solid #AFCD5D;
-      background: linear-gradient(180deg, #f8fce9, #eef8d5);
-      color: #5f7b18;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
+    .switch input:checked + .switch-slider {
+      background:var(--blue);
+      border-color:var(--blue);
     }
 
-    .plancher-info {
-      margin-top: 10px;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      background: var(--warn-bg);
-      border: 1px solid var(--warn-bd);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--warn-text);
-      display: none;
+    .switch input:checked + .switch-slider::before {
+      transform:translateX(20px);
     }
 
-    .plancher-info.show { display: block; }
+    .cost-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .metric {
+      padding:14px 16px;
+      background:white;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+    }
+
+    .metric.target {
+      grid-column:span 2;
+      background:linear-gradient(180deg, #f7fbec, #ffffff);
+      border-color:#AFCD5D;
+    }
+
+    .metric-label {
+      margin-bottom:5px;
+      color:var(--text-sub);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
+    }
+
+    .metric.target .metric-label { color:#647c29; }
+
+    .metric-value {
+      color:var(--text);
+      font-size:19px;
+      font-weight:800;
+    }
+
+    .metric.target .metric-value {
+      color:#5f7b18;
+      font-size:27px;
+    }
+
+    .metric-sub {
+      margin-top:3px;
+      color:var(--text-muted);
+      font-size:11px;
+    }
+
+    .price-footer {
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .floor-card {
+      display:none;
+      padding:11px 14px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      background:white;
+      color:var(--text-sub);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .floor-card.show { display:block; }
+
+    .floor-card strong {
+      color:var(--blue-dark);
+      font-size:14px;
+    }
 
     .blocked-banner {
-      margin-top: 10px;
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-      background: var(--block-bg);
-      border: 1px solid var(--block-bd);
-      display: none;
-      align-items: center;
-      gap: 12px;
+      display:none;
+      padding:13px 14px;
+      border:1px solid var(--red);
+      border-radius:var(--radius-md);
+      background:var(--red-soft);
+      color:#851c1c;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.45;
     }
 
-    .blocked-banner.show { display: flex; }
+    .blocked-banner.show { display:block; }
 
-    .blocked-text {
-      display: grid;
-      gap: 3px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--block-text);
+    .btn-cible {
+      width:100%;
+      height:44px;
+      border:1px solid #AFCD5D;
+      border-radius:var(--radius-md);
+      background:linear-gradient(180deg, #f8fce9, #eef8d5);
+      color:#5f7b18;
+      font-size:13px;
+      font-weight:800;
     }
 
-    .blocked-text span {
-      font-size: 11px;
-      font-weight: 600;
+    .result-panel {
+      position:sticky;
+      top:150px;
     }
 
     .result-card {
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      background: white;
-      padding: 22px;
-      box-shadow: var(--shadow-sm);
+      padding:22px;
+      background:white;
     }
 
-    .result-dashboard-top {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(190px, 0.78fr);
-      gap: 14px;
-      margin-bottom: 16px;
-      align-items: stretch;
+    .result-card.danger {
+      background:linear-gradient(180deg, var(--red-soft), #ffffff);
+      border-color:rgba(199,61,35,0.35);
     }
 
-    .result-main {
-      background: rgba(255,255,255,0.78);
-      border: 1px solid rgba(13,43,54,0.06);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .result-card.ok {
+      background:linear-gradient(180deg, var(--orange-soft), #ffffff);
+      border-color:rgba(230,138,46,0.38);
     }
+
+    .result-card.success {
+      background:linear-gradient(180deg, var(--green-soft), #ffffff);
+      border-color:rgba(44,122,50,0.34);
+    }
+
+    .empty-result {
+      min-height:360px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      gap:10px;
+      color:var(--text-sub);
+    }
+
+    .empty-result strong {
+      color:var(--blue-dark);
+      font-size:18px;
+    }
+
+    .result-top {
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(190px, 0.78fr);
+      gap:14px;
+      align-items:stretch;
+      margin-bottom:16px;
+    }
+
+    .main-score,
+    .result-mini {
+      background:rgba(255,255,255,0.80);
+      border:1px solid rgba(13,43,54,0.06);
+      border-radius:var(--radius-md);
+    }
+
+    .main-score {
+      min-width:0;
+      min-height:210px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:16px;
+    }
+
+    .score-label {
+      color:var(--blue-dark);
+      font-size:14px;
+      font-weight:800;
+      line-height:1.25;
+      margin-bottom:8px;
+    }
+
+    .score-value {
+      font-size:clamp(46px, 7vw, 68px);
+      font-weight:800;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .result-card.danger .score-value { color:var(--red); }
+    .result-card.ok .score-value { color:var(--orange); }
+    .result-card.success .score-value { color:var(--green); }
 
     .result-side {
-      display: grid;
-      gap: 10px;
+      display:grid;
+      gap:10px;
     }
 
     .result-mini {
-      background: rgba(255,255,255,0.78);
-      border: 1px solid rgba(13,43,54,0.06);
-      border-radius: var(--radius-md);
-      padding: 13px;
+      padding:13px;
     }
 
-    .result-mini .result-kpi-val { font-size: 18px; }
-
-    .result-card.danger { background: linear-gradient(180deg, var(--danger-bg), #ffffff); border-color: rgba(199,61,35,0.35); }
-    .result-card.ok { background: linear-gradient(180deg, var(--ok-bg), #ffffff); border-color: rgba(124,181,24,0.35); }
-    .result-card.success { background: linear-gradient(180deg, var(--success-bg), #ffffff); border-color: rgba(44,110,44,0.35); }
-
-    .result-card.danger .result-mc-val { color: var(--danger-color); }
-    .result-card.ok .result-mc-val { color: var(--green-light); }
-    .result-card.success .result-mc-val { color: var(--green-dark); }
-
-    .result-mc-label,
-    .result-kpi-label {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.45px;
-      color: var(--text-sub);
-      margin-bottom: 4px;
-      line-height: 1.25;
-      overflow-wrap: anywhere;
+    .result-mini-label {
+      margin-bottom:5px;
+      color:var(--text-sub);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:0.45px;
+      text-transform:uppercase;
+      line-height:1.25;
     }
 
-    .result-mc-val {
-      font-size: clamp(38px, 8vw, 54px);
-      font-weight: 700;
-      line-height: 1;
-      white-space: nowrap;
-    }
-
-    .result-kpi-val {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
+    .result-mini-value {
+      color:var(--text);
+      font-size:18px;
+      font-weight:800;
     }
 
     .bar-track {
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(13,43,54,0.08);
-      overflow: hidden;
-      margin-bottom: 8px;
+      height:10px;
+      border-radius:999px;
+      background:rgba(13,43,54,0.08);
+      overflow:hidden;
+      margin-bottom:8px;
     }
 
     .bar-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: var(--border);
-      transition: width 0.85s ease, background 0.3s;
+      height:100%;
+      border-radius:999px;
+      background:var(--border);
+      transition:width 0.6s ease, background 0.2s ease;
     }
 
-    .result-card.danger .bar-fill { background: var(--danger-color); }
-    .result-card.ok .bar-fill { background: var(--green-light); }
-    .result-card.success .bar-fill { background: var(--green-dark); }
+    .result-card.danger .bar-fill { background:var(--red); }
+    .result-card.ok .bar-fill { background:var(--orange); }
+    .result-card.success .bar-fill { background:var(--green); }
 
-    .bar-labels {
-      text-align: center;
-      font-size: 11px;
-      font-weight: 600;
-      margin-top: 4px;
+    .target-label {
+      text-align:center;
+      font-size:11px;
+      font-weight:700;
     }
 
-    .bar-labels .cible-label {
-      background: rgba(255,255,255,0.78);
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(13,43,54,0.06);
+    .target-label span {
+      display:inline-block;
+      padding:4px 10px;
+      border:1px solid rgba(13,43,54,0.06);
+      border-radius:999px;
+      background:rgba(255,255,255,0.78);
     }
 
     .status-msg {
-      font-size: 13px;
-      font-weight: 700;
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      background: rgba(255,255,255,0.72);
-      text-align: center;
-      margin-top: 14px;
-      border: 1px solid rgba(13,43,54,0.05);
+      margin-top:14px;
+      padding:12px 16px;
+      border-radius:var(--radius-md);
+      background:rgba(255,255,255,0.75);
+      border:1px solid rgba(13,43,54,0.05);
+      text-align:center;
+      font-size:13px;
+      font-weight:800;
     }
-
-    .result-card.danger .status-msg { color: #a4321c; }
-    .result-card.ok .status-msg { color: #3f6b0a; }
-    .result-card.success .status-msg { color: #1a4d1a; }
 
     .commission-block {
-      margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      background: white;
-      border: 1px solid rgba(13,43,54,0.08);
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:var(--radius-md);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:12px;
+      background:white;
+      border:1px solid rgba(13,43,54,0.08);
     }
 
-    .commission-block.danger { border-left: 4px solid var(--danger-color); }
-    .commission-block.ok { border-left: 4px solid var(--green-light); }
-    .commission-block.success { border-left: 4px solid var(--green-dark); }
-
-    .commission-block.danger .commission-label,
-    .commission-block.danger .commission-montant { color: var(--danger-color); }
-
-    .commission-block.ok .commission-label,
-    .commission-block.ok .commission-montant { color: var(--green-light); }
-
-    .commission-block.success .commission-label,
-    .commission-block.success .commission-montant { color: var(--green-dark); }
+    .commission-block.danger { border-left:4px solid var(--red); }
+    .commission-block.ok { border-left:4px solid var(--orange); }
+    .commission-block.success { border-left:4px solid var(--green); }
 
     .commission-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.45px;
+      color:var(--blue-dark);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:0.45px;
+      text-transform:uppercase;
     }
 
-    .commission-montant {
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .commission-taux,
+    .commission-rate,
     .commission-note {
-      font-size: 11px;
-      color: var(--text-muted);
+      color:var(--text-muted);
+      font-size:11px;
     }
 
-    .commission-help {
-      cursor: help;
-      border-bottom: 1px dashed #E68A2E;
-      position: relative;
+    .commission-amount {
+      color:var(--green);
+      font-size:28px;
+      font-weight:800;
+      white-space:nowrap;
     }
 
-    .commission-grid {
-      display: none;
-      position: absolute;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      font-size: 11px;
-      z-index: 200;
-      box-shadow: var(--shadow-md);
-      width: 180px;
-      right: 0;
-      top: 100%;
-      margin-top: 5px;
+    .mobile-summary {
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:120;
+      display:none;
+      grid-template-columns:repeat(3, 1fr);
+      gap:1px;
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+      background:rgba(21,89,112,0.98);
+      box-shadow:0 -10px 30px rgba(13,43,54,0.18);
     }
 
-    .commission-help:hover .commission-grid { display: block; }
-    .relative { position: relative; }
+    .mobile-summary.show { display:none; }
+
+    .mobile-summary-item {
+      min-width:0;
+      padding:8px 6px;
+      text-align:center;
+      color:white;
+    }
+
+    .mobile-summary-label {
+      font-size:9px;
+      font-weight:800;
+      text-transform:uppercase;
+      opacity:0.75;
+    }
+
+    .mobile-summary-value {
+      margin-top:2px;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
 
     .foot {
-      text-align: center;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      flex-wrap: wrap;
+      margin-top:24px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:6px;
+      flex-wrap:wrap;
+      color:var(--text-muted);
+      font-size:11px;
+      text-align:center;
     }
 
     .foot-dot {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: var(--text-muted);
+      width:3px;
+      height:3px;
+      border-radius:50%;
+      background:var(--text-muted);
     }
 
-    .placeholder {
-      text-align: center;
-      padding: 30px 20px;
-      color: var(--text-sub);
-      font-size: 13px;
-      font-weight: 600;
+    @media (max-width:940px) {
+      .workspace { grid-template-columns:1fr; }
+      .result-panel { position:static; }
     }
 
-    @media (max-width: 760px) {
-      .summary-inner {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    @media (max-width:760px) {
+      .summary-bar { display:none !important; }
+      .mobile-summary.show { display:grid; }
     }
 
-    @media (max-width: 500px) {
-      .login-page { padding: 14px; }
+    @media (max-width:560px) {
+      .login-page { padding:14px; }
 
       .login-card {
-        max-width: 100%;
-        padding: 28px 22px 24px;
-        border-radius: 18px;
+        max-width:100%;
+        padding:28px 22px 24px;
+        border-radius:18px;
       }
 
       .login-logo {
-        width: 205px;
-        max-width: 78%;
+        width:205px;
+        max-width:78%;
       }
 
       .topbar {
-        min-height: 62px;
-        padding: 0 12px;
+        min-height:62px;
+        padding:0 12px;
       }
 
       .logo-img {
-        height: 38px;
-        max-width: 116px;
-        padding: 5px 8px;
+        height:38px;
+        max-width:116px;
+        padding:5px 8px;
       }
 
-      .topbar-badge { display: none; }
+      .topbar-badge { display:none; }
 
       .logout-btn {
-        font-size: 11px;
-        padding: 7px 10px;
-      }
-
-      .summary-bar { top: 62px; }
-
-      .summary-inner {
-        padding: 8px 12px;
-        gap: 8px;
-      }
-
-      .summary-item {
-        padding: 8px 10px;
-      }
-
-      .summary-value {
-        font-size: 13px;
+        font-size:11px;
+        padding:7px 10px;
       }
 
       .page {
-        padding: 16px 12px 48px;
+        padding:14px 12px 92px;
       }
 
-      .step {
-        border-radius: 14px;
-        margin-bottom: 12px;
-      }
+      .panel { border-radius:14px; }
 
-      .step-head {
-        padding: 13px 14px;
-      }
+      .panel-head { padding:13px 14px; }
 
-      .step-body {
-        padding: 15px;
-      }
+      .panel-body { padding:14px; }
 
       .segmented,
-      .result-dashboard-top {
-        grid-template-columns: 1fr;
+      .cost-grid,
+      .result-top {
+        grid-template-columns:1fr;
       }
 
-      .option-card {
-        align-items: flex-start;
+      .metric.target { grid-column:span 1; }
+
+      .option-card { align-items:flex-start; }
+
+      .main-score { min-height:150px; }
+
+      .score-value { font-size:48px; }
+
+      .price-input-wrap .text-input {
+        height:58px;
+        font-size:22px;
       }
 
-      .pills {
-        grid-template-columns: 1fr;
-      }
+      .commission-block { align-items:flex-start; }
 
-      .pill.cible {
-        grid-column: span 1;
-      }
-
-      .pv-input-wrap input {
-        font-size: 20px;
-        height: 56px;
-        padding-left: 14px;
-      }
-
-      .result-mc-val {
-        font-size: 42px;
-      }
-
-      .commission-block {
-        align-items: flex-start;
-      }
-
-      .commission-montant {
-        font-size: 22px;
-      }
+      .commission-amount { font-size:24px; }
     }
   </style>
 </head>
@@ -982,10 +982,7 @@
 <body>
   <div id="loginPage" class="login-page">
     <div class="login-card">
-      <div class="login-logo-wrap">
-        <img src="Logo_Planete.png" alt="Planète+" class="login-logo">
-      </div>
-
+      <img src="Logo_Planete.png" alt="Planète+" class="login-logo">
       <div class="login-kicker">Espace interne</div>
       <h1>Simulateur commercial</h1>
       <p>Connectez-vous avec votre compte autorisé Planète+.</p>
@@ -1002,16 +999,13 @@
 
       <button type="button" onclick="login()">Se connecter</button>
       <p id="loginError" class="login-error"></p>
-
       <div class="login-footer">Accès réservé aux utilisateurs autorisés</div>
     </div>
   </div>
 
   <div id="app" style="display:none;">
     <div class="topbar">
-      <div class="logo-wrap">
-        <img src="Logo_Planete.png" alt="Planète+" class="logo-img">
-      </div>
+      <img src="Logo_Planete.png" alt="Planète+" class="logo-img">
       <div class="topbar-actions">
         <div class="topbar-badge">Simulateur commercial</div>
         <button type="button" onclick="logout()" class="logout-btn">Déconnexion</button>
@@ -1021,131 +1015,117 @@
     <div class="summary-bar" id="summaryBar">
       <div class="summary-inner">
         <div class="summary-item"><div class="summary-label">Puissance</div><div class="summary-value" id="s-kwc">—</div></div>
-        <div class="summary-item"><div class="summary-label">Prix cible</div><div class="summary-value" id="s-cible">—</div></div>
         <div class="summary-item"><div class="summary-label">Prix réel</div><div class="summary-value" id="s-pv">—</div></div>
-        <div class="summary-item"><div class="summary-label">MC</div><div class="summary-value" id="s-mc">—</div></div>
+        <div class="summary-item"><div class="summary-label">Marge</div><div class="summary-value" id="s-mc">—</div></div>
         <div class="summary-item"><div class="summary-label">Commission</div><div class="summary-value" id="s-commission">—</div></div>
-        <div class="summary-item"><div class="summary-label">Prix minimum</div><div class="summary-value" id="s-plancher">—</div></div>
         <div class="summary-item"><div class="summary-label">Statut</div><div class="summary-value" id="s-status">—</div></div>
       </div>
     </div>
 
     <div class="page">
-      <div class="step">
-        <div class="step-head">
-          <div class="step-num">1</div>
-          <div class="step-title">Saisir la puissance installée</div>
-        </div>
-        <div class="step-body">
-          <div class="custom-kwc-wrap">
-            <label for="kwc-custom">Puissance installée en kWc</label>
-            <input type="text" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-            <p id="kwc-method" class="kwc-method" style="display:none;"></p>
+      <div class="workspace">
+        <section class="panel">
+          <div class="panel-head">
+            <div class="step-num">1</div>
+            <div class="panel-title">Simulation</div>
           </div>
 
-          <div class="custom-kwc-wrap" id="bv-wrap" style="display:none;">
-            <div class="option-card">
-              <div>
-                <div class="option-title">My Smart Battery</div>
-                <div class="option-note">TVA à 5,5%. Option disponible uniquement avec une installation.</div>
-              </div>
-              <label class="switch" aria-label="Ajouter My Smart Battery">
-                <input type="checkbox" id="bv-option">
-                <span class="switch-slider"></span>
+          <div class="panel-body">
+            <div class="field-card">
+              <label class="field-label" for="kwc-custom">
+                Puissance installée en kWc
+                <span class="field-badge" id="kwc-badge">Hors grille</span>
+              </label>
+              <input class="text-input" type="text" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+              <p id="kwc-method" class="kwc-method" style="display:none;"></p>
+            </div>
+
+            <div class="segmented" id="phase-wrap" style="display:none;">
+              <label class="phase-option active" id="phaseMonoCard">
+                <input type="radio" name="phase" value="mono" id="phaseMono" checked>
+                Monophasé
+              </label>
+              <label class="phase-option" id="phaseTriCard">
+                <input type="radio" name="phase" value="tri" id="phaseTri">
+                Triphasé (+10%)
               </label>
             </div>
-          </div>
 
-          <div class="pills" id="pills" style="display:none;">
-            <div class="pill">
-              <div class="pill-label">Matériel HT</div>
-              <div class="pill-val" id="v-mat">—</div>
+            <div class="field-card" id="bv-wrap" style="display:none;">
+              <div class="option-card">
+                <div>
+                  <div class="option-title">My Smart Battery</div>
+                  <div class="option-note">TVA à 5,5%. Option disponible uniquement avec une installation.</div>
+                </div>
+                <label class="switch" aria-label="Ajouter My Smart Battery">
+                  <input type="checkbox" id="bv-option">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
             </div>
-            <div class="pill">
-              <div class="pill-label">Pose HT</div>
-              <div class="pill-val" id="v-pose">—</div>
-            </div>
-            <div class="pill cible">
-              <div class="pill-label">Prix de Vente cible</div>
-              <div class="pill-val" id="v-cible">—</div>
-              <div class="pill-sub" id="v-cible-mc">MC de référence grille</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="step" id="stepPhase" style="display: none;">
-        <div class="step-head">
-          <div class="step-num">2</div>
-          <div class="step-title">Type d'alimentation</div>
-        </div>
-        <div class="step-body">
-          <div class="segmented">
-            <label class="phase-option active" id="phaseMonoCard">
-              <input type="radio" name="phase" value="mono" id="phaseMono" checked>
-              Monophasé
-            </label>
-            <label class="phase-option" id="phaseTriCard">
-              <input type="radio" name="phase" value="tri" id="phaseTri">
-              Triphasé (+10%)
-            </label>
-          </div>
-        </div>
-      </div>
+            <div class="cost-grid" id="cost-grid" style="display:none;">
+              <div class="metric">
+                <div class="metric-label">Matériel HT</div>
+                <div class="metric-value" id="v-mat">—</div>
+              </div>
+              <div class="metric">
+                <div class="metric-label">Pose HT</div>
+                <div class="metric-value" id="v-pose">—</div>
+              </div>
+              <div class="metric target">
+                <div class="metric-label">Prix de Vente cible</div>
+                <div class="metric-value" id="v-cible">—</div>
+                <div class="metric-sub" id="v-cible-mc">MC de référence grille</div>
+              </div>
+            </div>
 
-      <div class="step">
-        <div class="step-head">
-          <div class="step-num">3</div>
-          <div class="step-title">Saisir le prix de vente réel</div>
-        </div>
-        <div class="step-body">
-          <div class="pv-input-wrap">
-            <input type="text" id="pv-reel" placeholder="Ex : 27 143 €" inputmode="numeric">
-            <button class="pv-clear" onclick="clearPV()">✕</button>
-          </div>
-          <div class="plancher-info" id="plancher-info">
-            ⚠️ Plancher autorisé (MC 45 %) : <strong id="plancher-val">—</strong>
-          </div>
-          <div class="blocked-banner" id="blocked-banner">
-            <div class="blocked-icon">🚫</div>
-            <div class="blocked-text">
-              Prix non autorisé — marge sous 45 %
-              <span>Plancher : <strong id="plancher-val2">—</strong></span>
-              <span>Montant manquant : <strong id="missing-val">—</strong></span>
+            <div class="field-card">
+              <label class="field-label" for="pv-reel">Prix de vente réel</label>
+              <div class="price-input-wrap">
+                <input class="text-input" type="text" id="pv-reel" placeholder="Ex : 27 143 €" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                <button class="clear-btn" type="button" onclick="clearPV()">✕</button>
+              </div>
+              <div class="price-footer">
+                <div class="floor-card" id="floor-card">Prix minimum autorisé : <strong id="plancher-val">—</strong></div>
+                <div class="blocked-banner" id="blocked-banner">
+                  Prix non autorisé. Il manque <strong id="missing-val">—</strong> pour respecter une marge de 45 %.
+                </div>
+                <button class="btn-cible" type="button" onclick="resetPV()">Revenir au Prix de Vente cible</button>
+              </div>
             </div>
           </div>
-          <button class="btn-cible" onclick="resetPV()">↩ Revenir au Prix de Vente cible</button>
-        </div>
-      </div>
+        </section>
 
-      <div class="step">
-        <div class="step-head">
-          <div class="step-num">4</div>
-          <div class="step-title">Résultat de la simulation</div>
-        </div>
-        <div class="step-body" id="result-body">
-          <div class="placeholder">
-            <div class="placeholder-icon">☀️</div>
-            Saisissez une puissance et un prix de vente.
+        <aside class="result-panel">
+          <div id="result-body" class="result-card">
+            <div class="empty-result">
+              <strong>Prêt à simuler</strong>
+              <span>Saisissez une puissance, puis le prix de vente réel.</span>
+            </div>
           </div>
-        </div>
+        </aside>
       </div>
 
       <div class="foot">
         <span>Grille tarifaire PLANETE+</span>
         <div class="foot-dot"></div>
-        <span class="commission-help relative">💰 Commission commerciale
-          <div class="commission-grid">
-            <strong>Grille variable</strong><br>
-            &lt;45% : 0%<br>
-            45-49,99% : 4%<br>
-            50-59,99% : 6%<br>
-            60-69,99% : 8%<br>
-            70-79,99% : 10%<br>
-            ≥80% : 12%<br>
-            <span style="font-size:9px;">(% de la MC)</span>
-          </div>
-        </span>
+        <span>Commission variable selon la marge commerciale</span>
+      </div>
+    </div>
+
+    <div class="mobile-summary" id="mobileSummary">
+      <div class="mobile-summary-item">
+        <div class="mobile-summary-label">Marge</div>
+        <div class="mobile-summary-value" id="m-mc">—</div>
+      </div>
+      <div class="mobile-summary-item">
+        <div class="mobile-summary-label">Commission</div>
+        <div class="mobile-summary-value" id="m-commission">—</div>
+      </div>
+      <div class="mobile-summary-item">
+        <div class="mobile-summary-label">Statut</div>
+        <div class="mobile-summary-value" id="m-status">—</div>
       </div>
     </div>
   </div>
@@ -1211,7 +1191,6 @@
     };
 
     const MC_MIN = 0.45;
-
     const BV = {
       mono: { pr: 1040, pv: 2095.23 },
       tri:  { pr: 1721, pv: 3428.57 }
@@ -1226,21 +1205,26 @@
     const parseVal = s => parseFloat(String(s).replace(/\s/g,'').replace('€','').replace(',','.')) || 0;
 
     const customKwcInput = document.getElementById('kwc-custom');
+    const pvInput = document.getElementById('pv-reel');
     const kwcMethod = document.getElementById('kwc-method');
+    const kwcBadge = document.getElementById('kwc-badge');
     const radioMono = document.getElementById('phaseMono');
     const radioTri = document.getElementById('phaseTri');
+    const phaseWrap = document.getElementById('phase-wrap');
     const bvOption = document.getElementById('bv-option');
     const bvWrap = document.getElementById('bv-wrap');
     const phaseMonoCard = document.getElementById('phaseMonoCard');
     const phaseTriCard = document.getElementById('phaseTriCard');
     const summaryBar = document.getElementById('summaryBar');
+    const mobileSummary = document.getElementById('mobileSummary');
     const summaryKwc = document.getElementById('s-kwc');
-    const summaryCible = document.getElementById('s-cible');
     const summaryPv = document.getElementById('s-pv');
     const summaryMc = document.getElementById('s-mc');
     const summaryCommission = document.getElementById('s-commission');
-    const summaryPlancher = document.getElementById('s-plancher');
     const summaryStatus = document.getElementById('s-status');
+    const mobileMc = document.getElementById('m-mc');
+    const mobileCommission = document.getElementById('m-commission');
+    const mobileStatus = document.getElementById('m-status');
 
     function getCommissionRate(mc) {
       if (mc < 45) return 0;
@@ -1266,43 +1250,45 @@
       return "success";
     }
 
-    function updatePhaseUi() {
-      phaseMonoCard.classList.toggle('active', radioMono.checked);
-      phaseTriCard.classList.toggle('active', radioTri.checked);
-    }
-
     function getStatusInfo(mc, isBlocked = false) {
-      if (isBlocked) return { label: 'Prix non autorisé', cls: 'status-danger' };
+      if (isBlocked) return { label: 'Prix interdit', cls: 'status-danger' };
       if (mc === null) return { label: 'En attente', cls: '' };
       if (mc < 50) return { label: 'Marge basse', cls: 'status-danger' };
       if (mc < 60) return { label: 'Bonne marge', cls: 'status-ok' };
       return { label: 'Excellente marge', cls: 'status-success' };
     }
 
+    function updatePhaseUi() {
+      phaseMonoCard.classList.toggle('active', radioMono.checked);
+      phaseTriCard.classList.toggle('active', radioTri.checked);
+    }
+
     function updateSummary({ pv = 0, mc = null, commission = null, isBlocked = false } = {}) {
       const hasSimulation = Boolean(currentKw && curCible);
       const status = getStatusInfo(mc, isBlocked);
+      const mcText = mc !== null ? mc.toFixed(1) + ' %' : '—';
+      const commissionText = commission !== null ? fmt(commission) : '—';
 
       summaryBar.classList.toggle('show', hasSimulation);
+      mobileSummary.classList.toggle('show', hasSimulation);
+
       summaryKwc.textContent = hasSimulation ? currentKw + ' kWc' : '—';
-      summaryCible.textContent = hasSimulation ? fmt(curCible) : '—';
       summaryPv.textContent = pv ? fmt(pv) : '—';
-      summaryMc.textContent = mc !== null ? mc.toFixed(1) + ' %' : '—';
-      summaryCommission.textContent = commission !== null ? fmt(commission) : '—';
-      summaryPlancher.textContent = hasSimulation ? fmt(curPlancher) : '—';
+      summaryMc.textContent = mcText;
+      summaryCommission.textContent = commissionText;
       summaryStatus.textContent = hasSimulation ? status.label : '—';
       summaryStatus.className = 'summary-value ' + status.cls;
+
+      mobileMc.textContent = mcText;
+      mobileCommission.textContent = commissionText;
+      mobileStatus.textContent = hasSimulation ? status.label : '—';
     }
 
     function getTarifByProduitEnCroix(kw) {
       const keys = Object.keys(TARIFS_BASE).map(Number).sort((a, b) => a - b);
 
       if (TARIFS_BASE[kw]) {
-        return {
-          data: TARIFS_BASE[kw],
-          baseKw: kw,
-          isCustom: false
-        };
+        return { data: TARIFS_BASE[kw], baseKw: kw, isCustom: false };
       }
 
       const lowerKw = keys.filter(k => k < kw).pop();
@@ -1350,13 +1336,13 @@
       document.getElementById('v-pose').textContent = fmt(data.pose);
       document.getElementById('v-cible').textContent = fmt(curCible);
       document.getElementById('v-cible-mc').textContent = 'MC ref : ' + cibleMC.toFixed(1) + ' %';
-      document.getElementById('pills').style.display = 'grid';
-      document.getElementById('stepPhase').style.display = 'block';
+      document.getElementById('cost-grid').style.display = 'grid';
+      phaseWrap.style.display = 'grid';
       bvWrap.style.display = 'block';
       document.getElementById('plancher-val').textContent = fmt(curPlancher);
-      document.getElementById('plancher-val2').textContent = fmt(curPlancher);
-      document.getElementById('plancher-info').classList.add('show');
+      document.getElementById('floor-card').classList.add('show');
 
+      kwcBadge.classList.toggle('show', isCustomKwc);
       kwcMethod.style.display = 'none';
       kwcMethod.innerHTML = '';
 
@@ -1371,12 +1357,14 @@
       const calculated = getTarifByProduitEnCroix(numericKw);
 
       if (!calculated || numericKw < 3 || numericKw > 250) {
-        document.getElementById('pills').style.display = 'none';
-        document.getElementById('stepPhase').style.display = 'none';
+        document.getElementById('cost-grid').style.display = 'none';
+        phaseWrap.style.display = 'none';
         bvWrap.style.display = 'none';
         if (bvOption) bvOption.checked = false;
         bvSelected = false;
-        document.getElementById('plancher-info').classList.remove('show');
+        document.getElementById('floor-card').classList.remove('show');
+        document.getElementById('blocked-banner').classList.remove('show');
+        kwcBadge.classList.remove('show');
         kwcMethod.style.display = 'none';
         kwcMethod.innerHTML = '';
         curPR = 0;
@@ -1390,7 +1378,6 @@
       baseData = calculated.data;
       baseReferenceKw = calculated.baseKw;
       isCustomKwc = calculated.isCustom;
-
       refreshPrices();
     }
 
@@ -1412,130 +1399,131 @@
     customKwcInput.addEventListener('input', () => {
       customKwcInput.value = customKwcInput.value.replace(/\D/g, '');
       const value = Number(customKwcInput.value);
-
       if (!value) {
         loadKwc('');
         return;
       }
-
       loadKwc(value);
     });
 
-    document.getElementById('pv-reel').addEventListener('input', compute);
+    pvInput.addEventListener('input', () => {
+      pvInput.value = pvInput.value.replace(/\D/g, '');
+      compute();
+    });
 
-    document.getElementById('pv-reel').addEventListener('blur', () => {
-      const input = document.getElementById('pv-reel');
-      const pv = parseVal(input.value);
-      if (pv) input.value = Math.round(pv).toLocaleString('fr-FR');
+    pvInput.addEventListener('blur', () => {
+      const pv = parseVal(pvInput.value);
+      if (pv) pvInput.value = Math.round(pv).toLocaleString('fr-FR');
     });
 
     window.resetPV = function() {
       if (curCible) {
-        document.getElementById('pv-reel').value = curCible.toLocaleString('fr-FR');
+        pvInput.value = Math.round(curCible).toLocaleString('fr-FR');
         compute();
       }
     };
 
     window.clearPV = function() {
-      document.getElementById('pv-reel').value = '';
+      pvInput.value = '';
       compute();
     };
 
+    function renderEmpty(message = 'Saisissez une puissance, puis le prix de vente réel.') {
+      const body = document.getElementById('result-body');
+      body.className = 'result-card';
+      body.innerHTML = `
+        <div class="empty-result">
+          <strong>Prêt à simuler</strong>
+          <span>${message}</span>
+        </div>`;
+    }
+
     function compute() {
-      const input = document.getElementById('pv-reel');
-      const pv = parseVal(input.value);
+      const pv = parseVal(pvInput.value);
       const body = document.getElementById('result-body');
       const blocked = document.getElementById('blocked-banner');
-      const prTotal = curPR;
-      const cibleTotal = curCible;
-      const plancherTotal = curPlancher;
 
-      if (curPR) {
-        document.getElementById('plancher-val').textContent = fmt(plancherTotal);
-        document.getElementById('plancher-val2').textContent = fmt(plancherTotal);
-      }
-
-      input.classList.remove('blocked');
+      pvInput.classList.remove('blocked');
       blocked.classList.remove('show');
 
-      if (!pv || !prTotal) {
+      if (!curPR || !curCible) {
         updateSummary();
-        body.innerHTML = `<div class="placeholder"><div class="placeholder-icon">☀️</div>Saisissez une puissance et un prix de vente.</div>`;
+        renderEmpty();
         return;
       }
 
-      if (pv < plancherTotal) {
-        input.classList.add('blocked');
-        blocked.classList.add('show');
+      if (!pv) {
+        updateSummary();
+        renderEmpty('Saisissez le prix de vente réel pour calculer la marge et la commission.');
+        return;
+      }
 
-        const blockedMarge = pv - prTotal;
+      if (pv < curPlancher) {
+        const blockedMarge = pv - curPR;
         const blockedMc = pv ? (blockedMarge / pv) * 100 : 0;
-        const missing = Math.max(0, plancherTotal - pv);
+        const missing = Math.max(0, curPlancher - pv);
 
+        pvInput.classList.add('blocked');
+        blocked.classList.add('show');
         document.getElementById('missing-val').textContent = fmt(missing);
         updateSummary({ pv, mc: blockedMc, commission: 0, isBlocked: true });
 
-        body.innerHTML = `<div class="placeholder"><div class="placeholder-icon">🚫</div>Prix non autorisé.<br>Relevez au plancher.</div>`;
+        body.className = 'result-card danger';
+        body.innerHTML = `
+          <div class="empty-result">
+            <strong>Prix non autorisé</strong>
+            <span>Relevez le prix à ${fmt(curPlancher)} minimum.</span>
+          </div>`;
         return;
       }
 
-      const marge = pv - prTotal;
+      const marge = pv - curPR;
       const mc = (marge / pv) * 100;
-      const ecart = pv - cibleTotal;
+      const ecart = pv - curCible;
       const diffPts = mc - cibleMC;
       const barPct = Math.min(100, Math.max(0, mc)).toFixed(1);
       const rate = getCommissionRate(mc);
       const commission = marge * rate;
       const rateLabel = getCommissionRateLabel(mc);
       const margeClass = getMargeClass(mc);
-      const icon = (margeClass === 'danger') ? '⚠️' : (margeClass === 'ok' ? '✅' : '🌟');
-      const msg = (mc < 50) ? `Marge entre 45% et 49,99% : attention, à améliorer.` :
-                  (mc < 60) ? `Bonne marge : commission ${rate * 100}%` :
-                              `Excellente marge : commission ${rate * 100}% !`;
+      const msg = (mc < 50) ? 'Marge basse : vente possible, mais à améliorer.' :
+                  (mc < 60) ? `Bonne marge : commission ${rate * 100}%.` :
+                              `Excellente marge : commission ${rate * 100}%.`;
 
       updateSummary({ pv, mc, commission });
 
+      body.className = 'result-card ' + margeClass;
       body.innerHTML = `
-        <div class="result-card ${margeClass}">
-          <div class="result-dashboard-top">
-            <div class="result-main">
-              <div class="result-mc-label">MC réelle</div>
-              <div class="result-mc-val">${mc.toFixed(1)} %</div>
+        <div class="result-top">
+          <div class="main-score">
+            <div class="score-label">Marge commerciale</div>
+            <div class="score-value">${mc.toFixed(1)} %</div>
+          </div>
+          <div class="result-side">
+            <div class="result-mini">
+              <div class="result-mini-label">Commission</div>
+              <div class="result-mini-value">${fmt(commission)}</div>
             </div>
-            <div class="result-side">
-              <div class="result-mini">
-                <div class="result-kpi-label">Commission</div>
-                <div class="result-kpi-val">${Math.round(commission).toLocaleString('fr-FR')} €</div>
-              </div>
-              <div class="result-mini">
-                <div class="result-kpi-label">Écart vs cible</div>
-                <div class="result-kpi-val">${fmtS(ecart)}</div>
-              </div>
-              <div class="result-mini">
-                <div class="result-kpi-label">Écart MC</div>
-                <div class="result-kpi-val">${diffPts >= 0 ? '+' : ''}${diffPts.toFixed(1)} pts</div>
-              </div>
+            <div class="result-mini">
+              <div class="result-mini-label">Écart vs cible</div>
+              <div class="result-mini-value">${fmtS(ecart)}</div>
+            </div>
+            <div class="result-mini">
+              <div class="result-mini-label">Écart MC</div>
+              <div class="result-mini-value">${diffPts >= 0 ? '+' : ''}${diffPts.toFixed(1)} pts</div>
             </div>
           </div>
-
-          <div class="bar-track">
-            <div class="bar-fill" style="width:${barPct}%"></div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
+        <div class="target-label"><span>Prix de Vente cible ${cibleMC.toFixed(1)} %${bvSelected ? ' + My Smart Battery' : ''}</span></div>
+        <div class="status-msg">${msg}</div>
+        <div class="commission-block ${margeClass}">
+          <div>
+            <div class="commission-label">Commission commerciale</div>
+            <div class="commission-rate">Taux : ${rateLabel}</div>
+            <div class="commission-note">Sur marge ${fmt(marge)}</div>
           </div>
-
-          <div class="bar-labels">
-            <span class="cible-label">Prix de Vente cible ${cibleMC.toFixed(1)} %${bvSelected ? ' + My Smart Battery' : ''}</span>
-          </div>
-
-          <div class="status-msg">${icon} ${msg}</div>
-
-          <div class="commission-block ${margeClass}">
-            <div>
-              <div class="commission-label">💰 Commission commerciale</div>
-              <div class="commission-taux">Taux : ${rateLabel}</div>
-              <div class="commission-note">(sur marge ${Math.round(marge).toLocaleString('fr-FR')} €)</div>
-            </div>
-            <div class="commission-montant">${Math.round(commission).toLocaleString('fr-FR')} €</div>
-          </div>
+          <div class="commission-amount">${fmt(commission)}</div>
         </div>`;
     }
 
