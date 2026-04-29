@@ -137,25 +137,7 @@
       color: var(--text-sub);
       font-size: 13px;
       line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    .login-benefits {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 22px;
-    }
-
-    .login-benefit {
-      padding: 9px 10px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: var(--surface-soft);
-      color: var(--blue-dark);
-      font-size: 11px;
-      font-weight: 800;
-      line-height: 1.25;
+      margin-bottom: 24px;
     }
 
     .login-field {
@@ -190,29 +172,6 @@
       border-color: var(--blue);
       box-shadow: 0 0 0 4px rgba(35,151,189,0.14);
       background: white;
-    }
-
-    .password-wrap {
-      position: relative;
-    }
-
-    .password-wrap input {
-      padding-right: 92px;
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 34px;
-      padding: 0 10px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: white;
-      color: var(--blue-dark);
-      font-size: 11px;
-      font-weight: 800;
     }
 
     .login-card button {
@@ -988,10 +947,6 @@
         max-width: 78%;
       }
 
-      .login-benefits {
-        grid-template-columns: 1fr;
-      }
-
       .topbar {
         min-height: 62px;
         padding: 0 12px;
@@ -1069,12 +1024,7 @@
       <img src="Logo_Planete.png" alt="Planète+" class="login-logo">
       <div class="login-kicker">Espace interne</div>
       <h1>Simulateur commercial</h1>
-      <p>Calculez rapidement la marge, le prix minimum et la commission commerciale.</p>
-
-      <div class="login-benefits">
-        <div class="login-benefit">Marge en direct</div>
-        <div class="login-benefit">Commission claire</div>
-      </div>
+      <p>Connectez-vous avec votre compte autorisé Planète+.</p>
 
       <div class="login-field">
         <label for="email">Email</label>
@@ -1083,15 +1033,12 @@
 
       <div class="login-field">
         <label for="password">Mot de passe</label>
-        <div class="password-wrap">
-          <input id="password" type="password" placeholder="Votre mot de passe" autocomplete="current-password">
-          <button class="password-toggle" type="button" onclick="togglePassword()">Afficher</button>
-        </div>
+        <input id="password" type="password" placeholder="Votre mot de passe" autocomplete="current-password">
       </div>
 
       <button id="loginBtn" type="button" onclick="login()">Se connecter</button>
       <p id="loginError" class="login-error"></p>
-      <div class="login-footer">Accès sécurisé réservé aux équipes Planète+</div>
+      <div class="login-footer">Accès réservé aux utilisateurs autorisés</div>
     </div>
   </div>
 
@@ -1222,14 +1169,6 @@
   </div>
 
   <script>
-    function togglePassword() {
-      const password = document.getElementById("password");
-      const toggle = document.querySelector(".password-toggle");
-      const isHidden = password.type === "password";
-      password.type = isHidden ? "text" : "password";
-      toggle.innerText = isHidden ? "Masquer" : "Afficher";
-    }
-
     function setLoginLoading(isLoading) {
       const button = document.getElementById("loginBtn");
       button.disabled = isLoading;
