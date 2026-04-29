@@ -329,7 +329,7 @@
     margin: 0 auto;
     padding: 10px 16px;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 10px;
   }
 
@@ -358,6 +358,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .summary-value.status-danger { color: var(--danger-color); }
+  .summary-value.status-ok { color: var(--green-light); }
+  .summary-value.status-success { color: var(--green-dark); }
 
   .step {
     background: rgba(255,255,255,0.96);
@@ -664,6 +668,23 @@
     margin-top: 0;
   }
 
+  .btn-copy {
+    width: 100%;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--blue);
+    background: var(--blue);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .btn-copy:hover {
+    background: var(--blue-dark);
+  }
+
   .btn-secondary {
     width: 100%;
     height: 44px;
@@ -707,6 +728,19 @@
   }
 
   .blocked-banner.show { display: flex; }
+
+  .blocked-text {
+    display: grid;
+    gap: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--block-text);
+  }
+
+  .blocked-text span {
+    font-size: 11px;
+    font-weight: 600;
+  }
 
   .result-card {
     border-radius: var(--radius-lg);
@@ -760,15 +794,6 @@
   .result-card.success .result-mc-val { color: var(--green-dark); }
 
   .result-mc-label,
-  .result-kpi-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.45px;
-    color: var(--text-sub);
-    margin-bottom: 4px;
-  }
-
   .result-mc-val {
     font-size: 54px;
     font-weight: 700;
@@ -1121,6 +1146,14 @@
           <div class="summary-label">Commission</div>
           <div class="summary-value" id="s-commission">—</div>
         </div>
+        <div class="summary-item">
+          <div class="summary-label">Prix minimum</div>
+          <div class="summary-value" id="s-plancher">—</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Statut</div>
+          <div class="summary-value" id="s-status">—</div>
+        </div>
       </div>
     </div>
 
@@ -1131,8 +1164,7 @@
         <div class="step-body">
           <div class="custom-kwc-wrap">
             <label for="kwc-custom">Puissance installée en kWc</label>
-            <input type="number" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." min="3" max="250" step="0.1">
-            <p class="field-help">Saisissez une puissance entre 3 et 250 kWc. Les puissances hors grille sont estimées automatiquement.</p>
+            <input type="text" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." inputmode="numeric" pattern="[0-9]*" autocomplete="off">
             <p id="kwc-method" class="kwc-method" style="display:none;"></p>
           </div>
           <div class="custom-kwc-wrap" id="bv-wrap" style="display:none;">
@@ -1163,7 +1195,6 @@
             <label class="phase-option active" id="phaseMonoCard"><input type="radio" name="phase" value="mono" id="phaseMono" checked> Monophasé</label>
             <label class="phase-option" id="phaseTriCard"><input type="radio" name="phase" value="tri" id="phaseTri"> Triphasé (+10%)</label>
           </div>
-          <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">Le prix augmente de 10% en triphasé.</p>
         </div>
       </div>
 
@@ -1178,11 +1209,11 @@
           <div class="plancher-info" id="plancher-info">⚠️ Plancher autorisé (MC 45 %) : <strong id="plancher-val">—</strong></div>
           <div class="blocked-banner" id="blocked-banner">
             <div class="blocked-icon">🚫</div>
-            <div class="blocked-text">Prix non autorisé — marge sous 45 %<span>Plancher : <strong id="plancher-val2">—</strong></span></div>
+            <div class="blocked-text">Prix non autorisé — marge sous 45 %<span>Plancher : <strong id="plancher-val2">—</strong></span><span>Montant manquant : <strong id="missing-val">—</strong></span></div>
           </div>
           <div class="action-row">
             <button class="btn-cible" onclick="resetPV()">↩ Revenir au Prix de Vente cible</button>
-            <button class="btn-secondary" onclick="newSimulation()">Nouvelle simulation</button>
+            <button class="btn-copy" onclick="copySummary()">Copier le résumé</button>
           </div>
         </div>
       </div>
@@ -1319,14 +1350,25 @@
     const summaryPv = document.getElementById('s-pv');
     const summaryMc = document.getElementById('s-mc');
     const summaryCommission = document.getElementById('s-commission');
+    const summaryPlancher = document.getElementById('s-plancher');
+    const summaryStatus = document.getElementById('s-status');
 
     function updatePhaseUi() {
       phaseMonoCard.classList.toggle('active', radioMono.checked);
       phaseTriCard.classList.toggle('active', radioTri.checked);
     }
 
-    function updateSummary({ pv = 0, mc = null, commission = null } = {}) {
+    function getStatusInfo(mc, isBlocked = false) {
+      if (isBlocked) return { label: 'Prix non autorisé', cls: 'status-danger' };
+      if (mc === null) return { label: 'En attente', cls: '' };
+      if (mc < 50) return { label: 'Marge basse', cls: 'status-danger' };
+      if (mc < 60) return { label: 'Bonne marge', cls: 'status-ok' };
+      return { label: 'Excellente marge', cls: 'status-success' };
+    }
+
+    function updateSummary({ pv = 0, mc = null, commission = null, isBlocked = false } = {}) {
       const hasSimulation = Boolean(currentKw && curCible);
+      const status = getStatusInfo(mc, isBlocked);
       summaryBar.classList.toggle('show', hasSimulation);
 
       summaryKwc.textContent = hasSimulation ? currentKw + ' kWc' : '—';
@@ -1334,6 +1376,9 @@
       summaryPv.textContent = pv ? fmt(pv) : '—';
       summaryMc.textContent = mc !== null ? mc.toFixed(1) + ' %' : '—';
       summaryCommission.textContent = commission !== null ? fmt(Math.round(commission)) : '—';
+      summaryPlancher.textContent = hasSimulation ? fmt(curPlancher) : '—';
+      summaryStatus.textContent = hasSimulation ? status.label : '—';
+      summaryStatus.className = 'summary-value ' + status.cls;
     }
 
     function getTarifByProduitEnCroix(kw) {
@@ -1398,13 +1443,8 @@
       document.getElementById('plancher-val2').textContent = fmt(curPlancher);
       document.getElementById('plancher-info').classList.add('show');
 
-      if (isCustomKwc) {
-        kwcMethod.style.display = 'block';
-        kwcMethod.innerHTML = `Prix estimé par produit en croix depuis la puissance inférieure : <strong>${baseReferenceKw} kWc</strong> → <strong>${currentKw} kWc</strong>.`;
-      } else {
-        kwcMethod.style.display = 'block';
-        kwcMethod.innerHTML = `Tarif exact de la grille : <strong>${currentKw} kWc</strong>.`;
-      }
+      kwcMethod.style.display = 'none';
+      kwcMethod.innerHTML = '';
 
       updateSummary();
       compute();
@@ -1447,6 +1487,7 @@
       if (currentKw) refreshPrices();
     });
     customKwcInput.addEventListener('input', () => {
+      customKwcInput.value = customKwcInput.value.replace(/\D/g, '');
       const value = Number(customKwcInput.value);
       if (!value) {
         loadKwc('');
@@ -1455,6 +1496,11 @@
       loadKwc(value);
     });
     document.getElementById('pv-reel').addEventListener('input', compute);
+    document.getElementById('pv-reel').addEventListener('blur', () => {
+      const input = document.getElementById('pv-reel');
+      const pv = parseVal(input.value);
+      if (pv) input.value = Math.round(pv).toLocaleString('fr-FR');
+    });
 
     window.resetPV = function() {
       if (curCible) {
@@ -1466,6 +1512,26 @@
     window.clearPV = function() {
       document.getElementById('pv-reel').value = '';
       compute();
+    };
+
+    window.copySummary = function() {
+      const pv = parseVal(document.getElementById('pv-reel').value);
+      const phase = radioTri.checked ? 'Triphasé (+10%)' : 'Monophasé';
+      const battery = bvSelected ? 'Oui' : 'Non';
+      const summaryText = [
+        'Simulation Planète+',
+        `Puissance : ${currentKw ? currentKw + ' kWc' : '—'}`,
+        `Alimentation : ${phase}`,
+        `My Smart Battery : ${battery}`,
+        `Prix cible : ${curCible ? fmt(curCible) : '—'}`,
+        `Prix minimum autorisé : ${curPlancher ? fmt(curPlancher) : '—'}`,
+        `Prix réel : ${pv ? fmt(pv) : '—'}`,
+        `MC : ${summaryMc.textContent}`,
+        `Commission : ${summaryCommission.textContent}`,
+        `Statut : ${summaryStatus.textContent}`
+      ].join('\n');
+
+      navigator.clipboard?.writeText(summaryText);
     };
 
     window.newSimulation = function() {
@@ -1525,7 +1591,9 @@
         blocked.classList.add('show');
         const blockedMarge = pv - prTotal;
         const blockedMc = pv ? (blockedMarge / pv) * 100 : 0;
-        updateSummary({ pv, mc: blockedMc, commission: 0 });
+        const missing = Math.max(0, plancherTotal - pv);
+        document.getElementById('missing-val').textContent = fmt(missing);
+        updateSummary({ pv, mc: blockedMc, commission: 0, isBlocked: true });
         body.innerHTML = `<div class="placeholder"><div class="placeholder-icon">🚫</div>Prix non autorisé.<br>Relevez au plancher.</div>`;
         return;
       }
