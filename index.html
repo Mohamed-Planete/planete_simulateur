@@ -358,20 +358,7 @@
 
   .step-body { padding: 18px; }
 
-  .select-wrap { position: relative; }
-
-  .select-wrap::after {
-    content: '';
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 5px solid transparent;
-    border-top: 6px solid var(--blue);
-    pointer-events: none;
-  }
-
-  select,
+ 
   .custom-kwc-wrap input,
   .pv-input-wrap input {
     font-family: 'Poppins', sans-serif;
@@ -381,18 +368,6 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
 
-  select {
-    width: 100%;
-    height: 52px;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: var(--radius-md);
-    padding: 0 44px 0 16px;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  select:focus,
   .custom-kwc-wrap input:focus,
   .pv-input-wrap input:focus {
     outline: none;
@@ -407,6 +382,9 @@
     border-radius: var(--radius-md);
     background: var(--surface-soft);
     border: 1px solid var(--border);
+  }
+  .step-body > .custom-kwc-wrap:first-child {
+    margin-top: 0;
   }
 
   .custom-kwc-wrap label {
@@ -879,12 +857,11 @@
     <div class="page">
       <!-- ÉTAPE 1 : Puissance -->
       <div class="step">
-        <div class="step-head"><div class="step-num">1</div><div class="step-title">Choisir la puissance installée</div></div>
+   <div class="step-head"><div class="step-num">1</div><div class="step-title">Saisir la puissance installée</div></div>
         <div class="step-body">
-          <div class="select-wrap"><select id="kwc"><option value="">— Sélectionner une puissance de la grille (kWc) —</option></select></div>
           <div class="custom-kwc-wrap">
-            <label for="kwc-custom">Ou saisir une puissance personnalisée</label>
-            <input type="number" id="kwc-custom" placeholder="Ex : 7" min="3" max="250" step="0.1">
+            <label for="kwc-custom">Puissance installée en kWc</label>
+            <input type="number" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." min="3" max="250" step="0.1">
             <p id="kwc-method" class="kwc-method" style="display:none;"></p>
           </div>
           <div class="custom-kwc-wrap" id="bv-wrap" style="display:none;">
@@ -1046,7 +1023,6 @@
     let curPR = 0, curCible = 0, curPlancher = 0, cibleMC = 0;
     let currentKw = null, baseData = null, baseReferenceKw = null, isCustomKwc = false;
 
-    const sel = document.getElementById('kwc');
     const customKwcInput = document.getElementById('kwc-custom');
     const kwcMethod = document.getElementById('kwc-method');
     const radioMono = document.getElementById('phaseMono');
@@ -1054,12 +1030,6 @@
     const bvOption = document.getElementById('bv-option');
     const bvWrap = document.getElementById('bv-wrap');
 
-    Object.keys(TARIFS_BASE).forEach(k => {
-      let o = document.createElement('option');
-      o.value = k;
-      o.textContent = k + ' kWc';
-      sel.appendChild(o);
-    });
 
     function getTarifByProduitEnCroix(kw) {
       const keys = Object.keys(TARIFS_BASE).map(Number).sort((a, b) => a - b);
@@ -1124,11 +1094,8 @@
       document.getElementById('plancher-info').classList.add('show');
 
       if (isCustomKwc) {
-        kwcMethod.style.display = 'block';
-        kwcMethod.innerHTML = `Prix estimé par produit en croix depuis la puissance inférieure : <strong>${baseReferenceKw} kWc</strong> → <strong>${currentKw} kWc</strong>.`;
-      } else {
-        kwcMethod.style.display = 'none';
-        kwcMethod.innerHTML = '';
+      kwcMethod.style.display = 'block';
+      kwcMethod.innerHTML = `Tarif exact de la grille : <strong>${currentKw} kWc</strong>.`;
       }
 
       compute();
@@ -1169,14 +1136,8 @@
       bvSelected = bvOption.checked;
       if (currentKw) refreshPrices();
     });
-    sel.addEventListener('change', () => {
-      customKwcInput.value = '';
-      loadKwc(sel.value);
-      compute();
-    });
 
     customKwcInput.addEventListener('input', () => {
-      sel.value = '';
       const value = Number(customKwcInput.value);
       if (!value) {
         loadKwc('');
