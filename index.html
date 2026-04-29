@@ -28,6 +28,7 @@
     const auth = firebase.auth();
 
     // Liste blanche : seuls ces emails pourront accéder au simulateur.
+    // Remplace les exemples ci-dessous par les vrais emails autorisés.
     const ALLOWED_EMAILS = [
       "mohamed.ela@planete-plus.fr",
       "contact@planete-plus.fr",
@@ -512,6 +513,10 @@
             <input type="number" id="kwc-custom" placeholder="Ex : 7" min="3" max="250" step="0.1">
             <p id="kwc-method" class="kwc-method" style="display:none;"></p>
           </div>
+          <div class="custom-kwc-wrap" id="bv-wrap" style="display:none;">
+            <label><input type="checkbox" id="bv-option"> Ajouter MY SMART BATTERIE</label>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">TVA à 5,5% sur la batterie virtuelle. Option disponible uniquement avec une installation.</p>
+          </div>
           <div class="pills" id="pills" style="display:none;">
             <div class="pill"><div class="pill-label">Matériel HT</div><div class="pill-val" id="v-mat">—</div></div>
             <div class="pill"><div class="pill-label">Pose HT</div><div class="pill-val" id="v-pose">—</div></div>
@@ -529,15 +534,6 @@
             <label><input type="radio" name="phase" value="tri" id="phaseTri"> Triphasé (+10%)</label>
           </div>
           <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">Le prix augmente de 10% en triphasé.</p>
-        </div>
-      </div>
-
-      <!-- ÉTAPE 2B : Batterie virtuelle -->
-      <div class="step" id="stepBV" style="display: none;">
-        <div class="step-head"><div class="step-num">2B</div><div class="step-title">Option batterie virtuelle</div></div>
-        <div class="step-body">
-          <label><input type="checkbox" id="bv-option"> Ajouter My Smart Battery</label>
-          <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">TVA à 5,5% sur la batterie virtuelle. Option disponible uniquement avec une installation.</p>
         </div>
       </div>
 
@@ -684,6 +680,7 @@
     const radioMono = document.getElementById('phaseMono');
     const radioTri = document.getElementById('phaseTri');
     const bvOption = document.getElementById('bv-option');
+    const bvWrap = document.getElementById('bv-wrap');
 
     Object.keys(TARIFS_BASE).forEach(k => {
       let o = document.createElement('option');
@@ -736,18 +733,20 @@
       if (!currentKw || !baseData) return;
 
       let data = applyTriphase(baseData, radioTri.checked);
-      curPR = data.pr;
-      curCible = data.cible;
-      cibleMC = ((data.cible - data.pr) / data.cible) * 100;
-      curPlancher = Math.ceil(data.pr / (1 - MC_MIN));
+      const bv = bvSelected ? (radioTri.checked ? BV.tri : BV.mono) : null;
+
+      curPR = data.pr + (bv ? bv.pr : 0);
+      curCible = data.cible + (bv ? bv.pv : 0);
+      cibleMC = ((curCible - curPR) / curCible) * 100;
+      curPlancher = Math.ceil(curPR / (1 - MC_MIN));
 
       document.getElementById('v-mat').textContent = fmt(data.mat);
       document.getElementById('v-pose').textContent = fmt(data.pose);
-      document.getElementById('v-cible').textContent = fmt(data.cible);
+      document.getElementById('v-cible').textContent = fmt(curCible);
       document.getElementById('v-cible-mc').textContent = 'MC ref : ' + cibleMC.toFixed(1) + ' %';
       document.getElementById('pills').style.display = 'grid';
       document.getElementById('stepPhase').style.display = 'block';
-      document.getElementById('stepBV').style.display = 'block';
+      bvWrap.style.display = 'block';
       document.getElementById('plancher-val').textContent = fmt(curPlancher);
       document.getElementById('plancher-val2').textContent = fmt(curPlancher);
       document.getElementById('plancher-info').classList.add('show');
@@ -772,7 +771,7 @@
       if (!calculated || numericKw < 3 || numericKw > 250) {
         document.getElementById('pills').style.display = 'none';
         document.getElementById('stepPhase').style.display = 'none';
-        document.getElementById('stepBV').style.display = 'none';
+        bvWrap.style.display = 'none';
         if (bvOption) bvOption.checked = false;
         bvSelected = false;
         document.getElementById('plancher-info').classList.remove('show');
@@ -796,7 +795,7 @@
     radioTri.addEventListener('change', () => { if (currentKw) refreshPrices(); });
     bvOption.addEventListener('change', () => {
       bvSelected = bvOption.checked;
-      compute();
+      if (currentKw) refreshPrices();
     });
     sel.addEventListener('change', () => {
       customKwcInput.value = '';
@@ -832,10 +831,9 @@
       const pv = parseVal(input.value);
       const body = document.getElementById('result-body');
       const blocked = document.getElementById('blocked-banner');
-      const bv = bvSelected ? (radioTri.checked ? BV.tri : BV.mono) : null;
-      const prTotal = curPR + (bv ? bv.pr : 0);
-      const cibleTotal = curCible + (bv ? bv.pv : 0);
-      const plancherTotal = Math.ceil(prTotal / (1 - MC_MIN));
+      const prTotal = curPR;
+      const cibleTotal = curCible;
+      const plancherTotal = curPlancher;
 
       if (curPR) {
         document.getElementById('plancher-val').textContent = fmt(plancherTotal);
@@ -878,7 +876,7 @@
             <div style="text-align:right;"><div class="result-kpi-label">Écart vs cible</div><div class="result-kpi-val">${fmtS(ecart)}</div><div class="result-kpi-label" style="margin-top:8px;">Écart MC</div><div class="result-kpi-val">${diffPts >= 0 ? '+' : ''}${diffPts.toFixed(1)} pts</div></div>
           </div>
           <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
-          <div class="bar-labels"><span class="cible-label">Prix de Vente cible ${cibleMC.toFixed(1)} %${bv ? ' + Batterie virtuelle' : ''}</span></div>
+          <div class="bar-labels"><span class="cible-label">Prix de Vente cible ${cibleMC.toFixed(1)} %${bvSelected ? ' + Batterie virtuelle' : ''}</span></div>
           <div class="status-msg">${icon} ${msg}</div>
           <div class="commission-block ${margeClass}">
             <div>
