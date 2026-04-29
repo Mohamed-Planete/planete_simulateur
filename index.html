@@ -733,7 +733,7 @@
     }
 
     .result-card.danger .score-value { color:var(--red); }
-    .result-card.ok .score-value { color:var(--orange); }
+    .result-card.ok .score-value { color: var(--lime); }
     .result-card.success .score-value { color:var(--green); }
 
     .result-side {
@@ -819,7 +819,7 @@
     }
 
     .commission-block.danger { border-left:4px solid var(--red); }
-    .commission-block.ok { border-left:4px solid var(--orange); }
+    .commission-block.ok { border-left: 4px solid var(--lime); }
     .commission-block.success { border-left:4px solid var(--green); }
 
     .commission-label {
@@ -1255,7 +1255,7 @@
       if (mc === null) return { label: 'En attente', cls: '' };
       if (mc < 50) return { label: 'Marge basse', cls: 'status-danger' };
       if (mc < 60) return { label: 'Bonne marge', cls: 'status-ok' };
-      return { label: 'Excellente marge', cls: 'status-success' };
+      return { label: 'Très bonne marge', cls: 'status-success' };
     }
 
     function updatePhaseUi() {
@@ -1486,9 +1486,9 @@
       const commission = marge * rate;
       const rateLabel = getCommissionRateLabel(mc);
       const margeClass = getMargeClass(mc);
-      const msg = (mc < 50) ? 'Marge basse : vente possible, mais à améliorer.' :
-                  (mc < 60) ? `Bonne marge : commission ${rate * 100}%.` :
-                              `Excellente marge : commission ${rate * 100}%.`;
+      const msg = (mc < 50) ? 'Marge basse : vente possible, mais à renforcer.' :
+                  (mc < 60) ? `Bonne marge : commission ${rate * 100}%. Continuez comme ça.` :
+                              `Très bonne marge : commission ${rate * 100}%. Objectif largement sécurisé.`;
 
       updateSummary({ pv, mc, commission });
 
