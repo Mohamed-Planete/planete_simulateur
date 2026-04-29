@@ -1,7 +1,7 @@
 {
   "name": "Planète+ Simulateur PV",
   "short_name": "PV Sim",
-  "start_url": "/"
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2397BD",
