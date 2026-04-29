@@ -234,8 +234,8 @@
   /* TOPBAR */
   .topbar {
     background: rgba(21,89,112,0.98);
-    padding: 0 28px;
-    min-height: 68px;
+    padding: 0 24px;
+    min-height: 58px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -254,7 +254,7 @@
   }
 
   .logo-img {
-    height: 46px;
+    height: 38px;
     width: auto;
     max-width: 142px;
     object-fit: contain;
@@ -307,9 +307,56 @@
   }
 
   .page {
-    max-width: 680px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 26px 16px 64px;
+    padding: 22px 16px 96px;
+  }
+
+  .summary-bar {
+    position: sticky;
+    top: 58px;
+    z-index: 80;
+    background: rgba(244,249,251,0.92);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    display: none;
+  }
+
+  .summary-bar.show { display: block; }
+
+  .summary-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .summary-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 9px 11px;
+    min-width: 0;
+  }
+
+  .summary-label {
+    color: var(--text-sub);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.45px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .summary-value {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .step {
@@ -358,7 +405,6 @@
 
   .step-body { padding: 18px; }
 
- 
   .custom-kwc-wrap input,
   .pv-input-wrap input {
     font-family: 'Poppins', sans-serif;
@@ -383,6 +429,7 @@
     background: var(--surface-soft);
     border: 1px solid var(--border);
   }
+
   .step-body > .custom-kwc-wrap:first-child {
     margin-top: 0;
   }
@@ -411,6 +458,110 @@
     font-size: 11px;
     color: var(--text-muted);
     line-height: 1.4;
+  }
+
+  .field-help {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .option-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .option-title {
+    color: var(--blue-dark);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .option-note {
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .switch {
+    position: relative;
+    flex: 0 0 auto;
+    width: 48px;
+    height: 28px;
+    display: inline-block;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .switch-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: #dbeaf0;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .switch-slider::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 2px;
+    top: 2px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 7px rgba(13,43,54,0.18);
+    transition: transform 0.2s ease;
+  }
+
+  .switch input:checked + .switch-slider {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .switch input:checked + .switch-slider::before {
+    transform: translateX(20px);
+  }
+
+  .segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .phase-option {
+    margin: 0 !important;
+    padding: 13px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: white;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .phase-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .phase-option.active {
+    border-color: var(--blue);
+    background: var(--blue-pale);
+    box-shadow: 0 0 0 3px rgba(35,151,189,0.10);
+    color: var(--blue-dark);
   }
 
   .pills {
@@ -502,6 +653,34 @@
 
   .btn-cible:hover { filter: brightness(0.99); }
 
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .action-row .btn-cible {
+    margin-top: 0;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-strong);
+    background: white;
+    color: var(--blue-dark);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-soft);
+  }
+
   .plancher-info {
     margin-top: 10px;
     padding: 10px 14px;
@@ -535,6 +714,36 @@
     background: white;
     padding: 22px;
     box-shadow: var(--shadow-sm);
+  }
+
+  .result-dashboard-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .result-main {
+    background: rgba(255,255,255,0.78);
+    border: 1px solid rgba(13,43,54,0.06);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+
+  .result-side {
+    display: grid;
+    gap: 10px;
+  }
+
+  .result-mini {
+    background: rgba(255,255,255,0.78);
+    border: 1px solid rgba(13,43,54,0.06);
+    border-radius: var(--radius-md);
+    padding: 13px;
+  }
+
+  .result-mini .result-kpi-val {
+    font-size: 18px;
   }
 
   .result-card:hover {
@@ -681,6 +890,18 @@
     accent-color: var(--blue);
   }
 
+  .step-body label.switch {
+    display: inline-block;
+    margin-right: 0;
+  }
+
+  .step-body .switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
   .commission-help {
     cursor: help;
     border-bottom: 1px dashed var(--commission);
@@ -750,12 +971,12 @@
     }
 
     .topbar {
-      min-height: 66px;
+      min-height: 56px;
       padding: 0 12px;
     }
 
     .logo-img {
-      height: 42px;
+      height: 38px;
       max-width: 116px;
       padding: 5px 8px;
     }
@@ -768,7 +989,21 @@
     }
 
     .page {
-      padding: 16px 12px 48px;
+      padding: 14px 12px 92px;
+    }
+
+    .summary-bar {
+      top: 56px;
+    }
+
+    .summary-inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 8px 12px;
+      gap: 8px;
+    }
+
+    .summary-item {
+      padding: 8px 10px;
     }
 
     .step {
@@ -796,6 +1031,16 @@
       font-size: 20px;
       height: 56px;
       padding-left: 14px;
+    }
+
+    .segmented,
+    .action-row,
+    .result-dashboard-top {
+      grid-template-columns: 1fr;
+    }
+
+    .option-card {
+      align-items: flex-start;
     }
 
     .result-mc-val {
@@ -854,19 +1099,53 @@
       </div>
     </div>
 
+    <div id="summaryBar" class="summary-bar">
+      <div class="summary-inner">
+        <div class="summary-item">
+          <div class="summary-label">Puissance</div>
+          <div class="summary-value" id="s-kwc">—</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Prix cible</div>
+          <div class="summary-value" id="s-cible">—</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Prix réel</div>
+          <div class="summary-value" id="s-pv">—</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">MC</div>
+          <div class="summary-value" id="s-mc">—</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Commission</div>
+          <div class="summary-value" id="s-commission">—</div>
+        </div>
+      </div>
+    </div>
+
     <div class="page">
       <!-- ÉTAPE 1 : Puissance -->
       <div class="step">
-   <div class="step-head"><div class="step-num">1</div><div class="step-title">Saisir la puissance installée</div></div>
+        <div class="step-head"><div class="step-num">1</div><div class="step-title">Saisir la puissance installée</div></div>
         <div class="step-body">
           <div class="custom-kwc-wrap">
             <label for="kwc-custom">Puissance installée en kWc</label>
             <input type="number" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." min="3" max="250" step="0.1">
+            <p class="field-help">Saisissez une puissance entre 3 et 250 kWc. Les puissances hors grille sont estimées automatiquement.</p>
             <p id="kwc-method" class="kwc-method" style="display:none;"></p>
           </div>
           <div class="custom-kwc-wrap" id="bv-wrap" style="display:none;">
-            <label><input type="checkbox" id="bv-option"> Ajouter My Smart Battery</label>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">TVA à 5,5% sur My Smart Battery. Option disponible uniquement avec une installation.</p>
+            <div class="option-card">
+              <div>
+                <div class="option-title">My Smart Battery</div>
+                <div class="option-note">TVA à 5,5%. Option disponible uniquement avec une installation.</div>
+              </div>
+              <label class="switch" aria-label="Ajouter My Smart Battery">
+                <input type="checkbox" id="bv-option">
+                <span class="switch-slider"></span>
+              </label>
+            </div>
           </div>
           <div class="pills" id="pills" style="display:none;">
             <div class="pill"><div class="pill-label">Matériel HT</div><div class="pill-val" id="v-mat">—</div></div>
@@ -880,9 +1159,9 @@
       <div class="step" id="stepPhase" style="display: none;">
         <div class="step-head"><div class="step-num">2</div><div class="step-title">Type d'alimentation</div></div>
         <div class="step-body">
-          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-            <label><input type="radio" name="phase" value="mono" id="phaseMono" checked> Monophasé</label>
-            <label><input type="radio" name="phase" value="tri" id="phaseTri"> Triphasé (+10%)</label>
+          <div class="segmented">
+            <label class="phase-option active" id="phaseMonoCard"><input type="radio" name="phase" value="mono" id="phaseMono" checked> Monophasé</label>
+            <label class="phase-option" id="phaseTriCard"><input type="radio" name="phase" value="tri" id="phaseTri"> Triphasé (+10%)</label>
           </div>
           <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px;">Le prix augmente de 10% en triphasé.</p>
         </div>
@@ -901,14 +1180,17 @@
             <div class="blocked-icon">🚫</div>
             <div class="blocked-text">Prix non autorisé — marge sous 45 %<span>Plancher : <strong id="plancher-val2">—</strong></span></div>
           </div>
-          <button class="btn-cible" onclick="resetPV()">↩ Revenir au Prix de Vente cible</button>
+          <div class="action-row">
+            <button class="btn-cible" onclick="resetPV()">↩ Revenir au Prix de Vente cible</button>
+            <button class="btn-secondary" onclick="newSimulation()">Nouvelle simulation</button>
+          </div>
         </div>
       </div>
 
       <!-- ÉTAPE 4 : Résultat -->
       <div class="step">
         <div class="step-head"><div class="step-num">4</div><div class="step-title">Résultat de la simulation</div></div>
-        <div class="step-body" id="result-body"><div class="placeholder"><div class="placeholder-icon">☀️</div>Sélectionnez une puissance et saisissez un prix de vente.</div></div>
+        <div class="step-body" id="result-body"><div class="placeholder"><div class="placeholder-icon">☀️</div>Saisissez une puissance et un prix de vente.</div></div>
       </div>
 
       <div class="foot">
@@ -1029,7 +1311,30 @@
     const radioTri = document.getElementById('phaseTri');
     const bvOption = document.getElementById('bv-option');
     const bvWrap = document.getElementById('bv-wrap');
+    const phaseMonoCard = document.getElementById('phaseMonoCard');
+    const phaseTriCard = document.getElementById('phaseTriCard');
+    const summaryBar = document.getElementById('summaryBar');
+    const summaryKwc = document.getElementById('s-kwc');
+    const summaryCible = document.getElementById('s-cible');
+    const summaryPv = document.getElementById('s-pv');
+    const summaryMc = document.getElementById('s-mc');
+    const summaryCommission = document.getElementById('s-commission');
 
+    function updatePhaseUi() {
+      phaseMonoCard.classList.toggle('active', radioMono.checked);
+      phaseTriCard.classList.toggle('active', radioTri.checked);
+    }
+
+    function updateSummary({ pv = 0, mc = null, commission = null } = {}) {
+      const hasSimulation = Boolean(currentKw && curCible);
+      summaryBar.classList.toggle('show', hasSimulation);
+
+      summaryKwc.textContent = hasSimulation ? currentKw + ' kWc' : '—';
+      summaryCible.textContent = hasSimulation ? fmt(curCible) : '—';
+      summaryPv.textContent = pv ? fmt(pv) : '—';
+      summaryMc.textContent = mc !== null ? mc.toFixed(1) + ' %' : '—';
+      summaryCommission.textContent = commission !== null ? fmt(Math.round(commission)) : '—';
+    }
 
     function getTarifByProduitEnCroix(kw) {
       const keys = Object.keys(TARIFS_BASE).map(Number).sort((a, b) => a - b);
@@ -1094,10 +1399,14 @@
       document.getElementById('plancher-info').classList.add('show');
 
       if (isCustomKwc) {
-      kwcMethod.style.display = 'block';
-      kwcMethod.innerHTML = `Tarif exact de la grille : <strong>${currentKw} kWc</strong>.`;
+        kwcMethod.style.display = 'block';
+        kwcMethod.innerHTML = `Prix estimé par produit en croix depuis la puissance inférieure : <strong>${baseReferenceKw} kWc</strong> → <strong>${currentKw} kWc</strong>.`;
+      } else {
+        kwcMethod.style.display = 'block';
+        kwcMethod.innerHTML = `Tarif exact de la grille : <strong>${currentKw} kWc</strong>.`;
       }
 
+      updateSummary();
       compute();
     }
 
@@ -1119,6 +1428,7 @@
         curPR = 0;
         curCible = 0;
         curPlancher = 0;
+        updateSummary();
         compute();
         return;
       }
@@ -1130,13 +1440,12 @@
       refreshPrices();
     }
 
-    radioMono.addEventListener('change', () => { if (currentKw) refreshPrices(); });
-    radioTri.addEventListener('change', () => { if (currentKw) refreshPrices(); });
+    radioMono.addEventListener('change', () => { updatePhaseUi(); if (currentKw) refreshPrices(); });
+    radioTri.addEventListener('change', () => { updatePhaseUi(); if (currentKw) refreshPrices(); });
     bvOption.addEventListener('change', () => {
       bvSelected = bvOption.checked;
       if (currentKw) refreshPrices();
     });
-
     customKwcInput.addEventListener('input', () => {
       const value = Number(customKwcInput.value);
       if (!value) {
@@ -1159,6 +1468,35 @@
       compute();
     };
 
+    window.newSimulation = function() {
+      currentKw = null;
+      baseData = null;
+      baseReferenceKw = null;
+      isCustomKwc = false;
+      curPR = 0;
+      curCible = 0;
+      curPlancher = 0;
+      cibleMC = 0;
+      bvSelected = false;
+
+      customKwcInput.value = '';
+      document.getElementById('pv-reel').value = '';
+      bvOption.checked = false;
+      radioMono.checked = true;
+      radioTri.checked = false;
+      updatePhaseUi();
+
+      document.getElementById('pills').style.display = 'none';
+      document.getElementById('stepPhase').style.display = 'none';
+      bvWrap.style.display = 'none';
+      document.getElementById('plancher-info').classList.remove('show');
+      document.getElementById('blocked-banner').classList.remove('show');
+      kwcMethod.style.display = 'none';
+      kwcMethod.innerHTML = '';
+      updateSummary();
+      compute();
+    };
+
     function compute() {
       const input = document.getElementById('pv-reel');
       const pv = parseVal(input.value);
@@ -1177,13 +1515,17 @@
       blocked.classList.remove('show');
 
       if (!pv || !prTotal) {
-        body.innerHTML = `<div class="placeholder"><div class="placeholder-icon">☀️</div>Saisissez un prix de vente réel.</div>`;
+        updateSummary();
+        body.innerHTML = `<div class="placeholder"><div class="placeholder-icon">☀️</div>Saisissez une puissance et un prix de vente.</div>`;
         return;
       }
 
       if (pv < plancherTotal) {
         input.classList.add('blocked');
         blocked.classList.add('show');
+        const blockedMarge = pv - prTotal;
+        const blockedMc = pv ? (blockedMarge / pv) * 100 : 0;
+        updateSummary({ pv, mc: blockedMc, commission: 0 });
         body.innerHTML = `<div class="placeholder"><div class="placeholder-icon">🚫</div>Prix non autorisé.<br>Relevez au plancher.</div>`;
         return;
       }
@@ -1201,12 +1543,29 @@
       const msg = (mc < 50) ? `Marge entre 45% et 49,99% : attention, à améliorer.` :
                   (mc < 60) ? `Bonne marge : commission ${rate * 100}%` :
                               `Excellente marge : commission ${rate * 100}% !`;
+      updateSummary({ pv, mc, commission });
 
       body.innerHTML = `
         <div class="result-card ${margeClass}">
-          <div style="display:flex;justify-content:space-between;margin-bottom:18px;gap:12px;">
-            <div><div class="result-mc-label">Marge commerciale réelle</div><div class="result-mc-val">${mc.toFixed(1)} %</div></div>
-            <div style="text-align:right;"><div class="result-kpi-label">Écart vs cible</div><div class="result-kpi-val">${fmtS(ecart)}</div><div class="result-kpi-label" style="margin-top:8px;">Écart MC</div><div class="result-kpi-val">${diffPts >= 0 ? '+' : ''}${diffPts.toFixed(1)} pts</div></div>
+          <div class="result-dashboard-top">
+            <div class="result-main">
+              <div class="result-mc-label">Marge commerciale réelle</div>
+              <div class="result-mc-val">${mc.toFixed(1)} %</div>
+            </div>
+            <div class="result-side">
+              <div class="result-mini">
+                <div class="result-kpi-label">Commission</div>
+                <div class="result-kpi-val">${Math.round(commission).toLocaleString('fr-FR')} €</div>
+              </div>
+              <div class="result-mini">
+                <div class="result-kpi-label">Écart vs cible</div>
+                <div class="result-kpi-val">${fmtS(ecart)}</div>
+              </div>
+              <div class="result-mini">
+                <div class="result-kpi-label">Écart MC</div>
+                <div class="result-kpi-val">${diffPts >= 0 ? '+' : ''}${diffPts.toFixed(1)} pts</div>
+              </div>
+            </div>
           </div>
           <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
           <div class="bar-labels"><span class="cible-label">Prix de Vente cible ${cibleMC.toFixed(1)} %${bvSelected ? ' + My Smart Battery' : ''}</span></div>
