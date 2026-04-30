@@ -312,7 +312,7 @@
       margin: 0 auto;
       padding: 10px 16px;
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -602,8 +602,9 @@
     }
 
     .metric.target {
-      background: linear-gradient(180deg, #f7fbec, #ffffff);
-      border-color: #AFCD5D;
+      padding: 12px 14px;
+      background: white;
+      border-color: rgba(124,181,24,0.36);
     }
 
     .metric-label {
@@ -616,7 +617,7 @@
     }
 
     .metric.target .metric-label {
-      color: #647c29;
+      color: var(--text-sub);
     }
 
     .metric-value {
@@ -626,8 +627,8 @@
     }
 
     .metric.target .metric-value {
-      color: #5f7b18;
-      font-size: 27px;
+      color: var(--green);
+      font-size: 22px;
     }
 
     .metric-sub {
@@ -718,7 +719,6 @@
     }
 
     .btn-minimum {
-      display: none;
       width: 100%;
       height: 44px;
       border: 1px solid var(--border-strong);
@@ -727,6 +727,17 @@
       color: var(--blue-dark);
       font-size: 13px;
       font-weight: 800;
+    }
+
+    .price-actions .btn-minimum {
+      display: none;
+    }
+
+    .result-action {
+      max-width: 260px;
+      margin: 16px auto 0;
+      display: block;
+      background: white;
     }
 
     .result-panel {
@@ -771,6 +782,12 @@
     .empty-result strong {
       color: var(--blue-dark);
       font-size: 18px;
+    }
+
+    .empty-result .minimum-note {
+      color: var(--text-sub);
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .result-top {
@@ -1153,7 +1170,6 @@
 
     <div class="summary-bar" id="summaryBar">
       <div class="summary-inner">
-        <div class="summary-item"><div class="summary-label">Puissance</div><div class="summary-value" id="s-kwc">—</div></div>
         <div class="summary-item"><div class="summary-label">Marge</div><div class="summary-value" id="s-mc">—</div></div>
         <div class="summary-item"><div class="summary-label">Commission</div><div class="summary-value" id="s-commission">—</div></div>
         <div class="summary-item"><div class="summary-label">Statut</div><div class="summary-value" id="s-status">—</div></div>
@@ -1170,7 +1186,9 @@
 
           <div class="panel-body">
             <div class="field-card">
-              <label class="field-label" for="kwc-custom">Puissance installée en kWc</label>
+              <label class="field-label" for="kwc-custom">
+                Puissance installée en kWc
+              </label>
               <input class="text-input" type="text" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." inputmode="decimal" autocomplete="off">
               <p id="kwc-method" class="kwc-method" style="display:none;"></p>
             </div>
@@ -1221,7 +1239,6 @@
                 <input class="text-input" type="text" id="pv-reel" placeholder="Ex : 27 143 €" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
                 <button class="clear-btn" type="button" onclick="clearPV()">✕</button>
               </div>
-
               <div class="price-footer">
                 <div class="floor-card" id="floor-card">Prix minimum autorisé : <strong id="plancher-val">—</strong></div>
                 <div class="target-delta" id="target-delta"></div>
@@ -1241,7 +1258,7 @@
           <div id="result-body" class="result-card">
             <div class="empty-result">
               <strong>Prêt à simuler</strong>
-              <span>Saisissez le prix de vente réel pour calculer la marge et la commission.</span>
+              <span>Saisissez une puissance, puis le prix de vente réel.</span>
             </div>
           </div>
         </aside>
@@ -1392,7 +1409,6 @@
     const phaseTriCard = document.getElementById('phaseTriCard');
     const summaryBar = document.getElementById('summaryBar');
     const mobileSummary = document.getElementById('mobileSummary');
-    const summaryKwc = document.getElementById('s-kwc');
     const summaryMc = document.getElementById('s-mc');
     const summaryCommission = document.getElementById('s-commission');
     const summaryStatus = document.getElementById('s-status');
@@ -1427,9 +1443,9 @@
     function getStatusInfo(mc, isBlocked = false) {
       if (isBlocked) return { label: 'Prix interdit', cls: 'status-danger' };
       if (mc === null) return { label: 'En attente', cls: '' };
-      if (mc < 50) return { label: 'Marge basse', cls: 'status-danger' };
-      if (mc < 60) return { label: 'Bonne marge', cls: 'status-ok' };
-      return { label: 'Très bonne marge', cls: 'status-success' };
+      if (mc < 50) return { label: 'À corriger', cls: 'status-danger' };
+      if (mc < 60) return { label: 'Bonne vente', cls: 'status-ok' };
+      return { label: 'Très bonne vente', cls: 'status-success' };
     }
 
     function updatePhaseUi() {
@@ -1446,7 +1462,6 @@
       summaryBar.classList.toggle('show', hasSimulation);
       mobileSummary.classList.toggle('show', hasSimulation);
 
-      summaryKwc.textContent = hasSimulation ? currentKw + ' kWc' : '—';
       summaryMc.textContent = mcText;
       summaryCommission.textContent = commissionText;
       summaryStatus.textContent = hasSimulation ? status.label : '—';
@@ -1515,8 +1530,13 @@
       document.getElementById('plancher-val').textContent = fmt(curPlancher);
       document.getElementById('floor-card').classList.remove('show');
 
-      kwcMethod.style.display = 'none';
-      kwcMethod.innerHTML = '';
+      if (isCustomKwc) {
+        kwcMethod.style.display = 'none';
+        kwcMethod.innerHTML = '';
+      } else {
+        kwcMethod.style.display = 'none';
+        kwcMethod.innerHTML = '';
+      }
 
       updateSummary();
       compute();
@@ -1612,28 +1632,8 @@
 
     function updateTargetDelta(pv) {
       const targetDelta = document.getElementById('target-delta');
-
-      if (!curCible) {
-        targetDelta.className = 'target-delta';
-        targetDelta.textContent = '';
-        return;
-      }
-
-      if (!pv) {
-        targetDelta.className = 'target-delta';
-        targetDelta.textContent = '';
-        return;
-      }
-
-      const delta = pv - curCible;
-      if (delta >= 0) {
-        targetDelta.className = 'target-delta';
-        targetDelta.textContent = '';
-        return;
-      }
-
-      targetDelta.className = 'target-delta show warn';
-      targetDelta.textContent = fmt(Math.abs(delta)) + ' à ajouter pour atteindre le prix cible.';
+      targetDelta.className = 'target-delta';
+      targetDelta.textContent = '';
     }
 
     function renderEmpty(message = 'Saisissez une puissance, puis le prix de vente réel.') {
@@ -1682,7 +1682,9 @@
         body.innerHTML = `
           <div class="empty-result">
             <strong>Prix non autorisé</strong>
-            <span>Relevez le prix à ${fmt(curPlancher)} minimum.</span>
+            <span>Le prix saisi est sous la marge minimum autorisée.</span>
+            <div class="minimum-note">Minimum autorisé : ${fmt(curPlancher)}</div>
+            <button class="btn-minimum result-action" type="button" onclick="setPVMinimum()">Mettre au minimum autorisé</button>
           </div>`;
         return;
       }
@@ -1696,9 +1698,9 @@
       const commission = marge * rate;
       const rateLabel = getCommissionRateLabel(mc);
       const margeClass = getMargeClass(mc);
-      const msg = (mc < 50) ? 'Marge basse : vente possible, mais à renforcer.' :
-                  (mc < 60) ? `Bonne marge : commission ${rate * 100}%. Continuez comme ça.` :
-                              `Très bonne marge : commission ${rate * 100}%. Objectif largement sécurisé.`;
+      const msg = (mc < 50) ? 'Vente autorisée, mais marge à renforcer.' :
+                  (mc < 60) ? `Bonne vente : commission ${rate * 100}%. Continuez comme ça.` :
+                              `Très bonne vente : commission ${rate * 100}%. Objectif largement sécurisé.`;
 
       updateSummary({ pv, mc, commission });
 
