@@ -312,7 +312,7 @@
       margin: 0 auto;
       padding: 10px 16px;
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -586,8 +586,12 @@
 
     .cost-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 10px;
+    }
+
+    .metric:not(.target) {
+      display: none;
     }
 
     .metric {
@@ -598,7 +602,6 @@
     }
 
     .metric.target {
-      grid-column: span 2;
       background: linear-gradient(180deg, #f7fbec, #ffffff);
       border-color: #AFCD5D;
     }
@@ -628,9 +631,7 @@
     }
 
     .metric-sub {
-      margin-top: 3px;
-      color: var(--text-muted);
-      font-size: 11px;
+      display: none;
     }
 
     .price-footer {
@@ -641,10 +642,11 @@
 
     .floor-card {
       display: none;
-      padding: 11px 14px;
+      padding: 9px 2px;
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      background: white;
+      background: transparent;
+      border-color: transparent;
       color: var(--text-sub);
       font-size: 12px;
       font-weight: 700;
@@ -661,10 +663,10 @@
 
     .target-delta {
       display: none;
-      padding: 11px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: white;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
       color: var(--text-sub);
       font-size: 12px;
       font-weight: 800;
@@ -675,14 +677,10 @@
     }
 
     .target-delta.good {
-      border-color: rgba(44,122,50,0.25);
-      background: #f1fbf4;
       color: var(--green);
     }
 
     .target-delta.warn {
-      border-color: rgba(230,138,46,0.25);
-      background: var(--orange-soft);
       color: #9a5608;
     }
 
@@ -715,11 +713,12 @@
 
     .price-actions {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 10px;
     }
 
     .btn-minimum {
+      display: none;
       width: 100%;
       height: 44px;
       border: 1px solid var(--border-strong);
@@ -759,7 +758,7 @@
     }
 
     .empty-result {
-      min-height: 360px;
+      min-height: 260px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -862,6 +861,7 @@
     .result-card.success .bar-fill { background: var(--green); }
 
     .target-label {
+      display: none;
       text-align: center;
       font-size: 11px;
       font-weight: 700;
@@ -876,7 +876,7 @@
     }
 
     .tier-scale {
-      display: grid;
+      display: none;
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
       margin-top: 12px;
@@ -1154,7 +1154,6 @@
     <div class="summary-bar" id="summaryBar">
       <div class="summary-inner">
         <div class="summary-item"><div class="summary-label">Puissance</div><div class="summary-value" id="s-kwc">—</div></div>
-        <div class="summary-item"><div class="summary-label">Prix réel</div><div class="summary-value" id="s-pv">—</div></div>
         <div class="summary-item"><div class="summary-label">Marge</div><div class="summary-value" id="s-mc">—</div></div>
         <div class="summary-item"><div class="summary-label">Commission</div><div class="summary-value" id="s-commission">—</div></div>
         <div class="summary-item"><div class="summary-label">Statut</div><div class="summary-value" id="s-status">—</div></div>
@@ -1210,7 +1209,7 @@
                 <div class="metric-value" id="v-pose">—</div>
               </div>
               <div class="metric target">
-                <div class="metric-label">Prix de Vente cible</div>
+                <div class="metric-label">Prix cible recommandé</div>
                 <div class="metric-value" id="v-cible">—</div>
                 <div class="metric-sub" id="v-cible-mc">MC de référence grille</div>
               </div>
@@ -1231,7 +1230,7 @@
                 </div>
                 <div class="price-actions">
                   <button class="btn-minimum" type="button" onclick="setPVMinimum()">Mettre au prix minimum</button>
-                  <button class="btn-cible" type="button" onclick="resetPV()">Revenir au prix cible</button>
+                  <button class="btn-cible" type="button" onclick="resetPV()">Utiliser le prix cible</button>
                 </div>
               </div>
             </div>
@@ -1242,7 +1241,7 @@
           <div id="result-body" class="result-card">
             <div class="empty-result">
               <strong>Prêt à simuler</strong>
-              <span>Saisissez une puissance, puis le prix de vente réel.</span>
+              <span>Saisissez le prix de vente réel pour calculer la marge et la commission.</span>
             </div>
           </div>
         </aside>
@@ -1394,7 +1393,6 @@
     const summaryBar = document.getElementById('summaryBar');
     const mobileSummary = document.getElementById('mobileSummary');
     const summaryKwc = document.getElementById('s-kwc');
-    const summaryPv = document.getElementById('s-pv');
     const summaryMc = document.getElementById('s-mc');
     const summaryCommission = document.getElementById('s-commission');
     const summaryStatus = document.getElementById('s-status');
@@ -1440,7 +1438,7 @@
     }
 
     function updateSummary({ pv = 0, mc = null, commission = null, isBlocked = false } = {}) {
-      const hasSimulation = Boolean(currentKw && curCible);
+      const hasSimulation = Boolean(currentKw && curCible && pv);
       const status = getStatusInfo(mc, isBlocked);
       const mcText = mc !== null ? mc.toFixed(1) + ' %' : '—';
       const commissionText = commission !== null ? fmt(commission) : '—';
@@ -1449,7 +1447,6 @@
       mobileSummary.classList.toggle('show', hasSimulation);
 
       summaryKwc.textContent = hasSimulation ? currentKw + ' kWc' : '—';
-      summaryPv.textContent = pv ? fmt(pv) : '—';
       summaryMc.textContent = mcText;
       summaryCommission.textContent = commissionText;
       summaryStatus.textContent = hasSimulation ? status.label : '—';
@@ -1516,15 +1513,10 @@
       phaseWrap.style.display = 'grid';
       bvWrap.style.display = 'block';
       document.getElementById('plancher-val').textContent = fmt(curPlancher);
-      document.getElementById('floor-card').classList.add('show');
+      document.getElementById('floor-card').classList.remove('show');
 
-      if (isCustomKwc) {
-        kwcMethod.style.display = 'block';
-        kwcMethod.innerHTML = `Estimation par produit en croix depuis <strong>${baseReferenceKw} kWc</strong>.`;
-      } else {
-        kwcMethod.style.display = 'none';
-        kwcMethod.innerHTML = '';
-      }
+      kwcMethod.style.display = 'none';
+      kwcMethod.innerHTML = '';
 
       updateSummary();
       compute();
@@ -1628,16 +1620,20 @@
       }
 
       if (!pv) {
-        targetDelta.className = 'target-delta show';
-        targetDelta.textContent = 'Prix cible recommandé : ' + fmt(curCible);
+        targetDelta.className = 'target-delta';
+        targetDelta.textContent = '';
         return;
       }
 
       const delta = pv - curCible;
-      targetDelta.className = 'target-delta show ' + (delta >= 0 ? 'good' : 'warn');
-      targetDelta.textContent = delta >= 0
-        ? fmt(delta) + ' au-dessus du prix cible.'
-        : fmt(Math.abs(delta)) + ' à ajouter pour atteindre le prix cible.';
+      if (delta >= 0) {
+        targetDelta.className = 'target-delta';
+        targetDelta.textContent = '';
+        return;
+      }
+
+      targetDelta.className = 'target-delta show warn';
+      targetDelta.textContent = fmt(Math.abs(delta)) + ' à ajouter pour atteindre le prix cible.';
     }
 
     function renderEmpty(message = 'Saisissez une puissance, puis le prix de vente réel.') {
