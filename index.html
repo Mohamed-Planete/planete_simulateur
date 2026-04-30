@@ -199,6 +199,25 @@
       transform: none;
     }
 
+    .login-link {
+      width: auto !important;
+      height: auto !important;
+      margin: 10px auto 0 !important;
+      padding: 0;
+      border: 0;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: var(--blue-dark) !important;
+      font-size: 12px !important;
+      font-weight: 800;
+    }
+
+    .login-link:hover {
+      transform: none !important;
+      box-shadow: none !important;
+      text-decoration: underline;
+    }
+
     .login-error {
       min-height: 18px;
       margin: 12px 0 0 !important;
@@ -423,6 +442,13 @@
       box-shadow: 0 0 0 4px rgba(35,151,189,0.13);
     }
 
+    .kwc-method {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
     .price-input-wrap {
       position: relative;
     }
@@ -610,6 +636,7 @@
     .price-footer {
       display: grid;
       gap: 10px;
+      margin-top: 10px;
     }
 
     .floor-card {
@@ -630,6 +657,33 @@
     .floor-card strong {
       color: var(--blue-dark);
       font-size: 14px;
+    }
+
+    .target-delta {
+      display: none;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: white;
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .target-delta.show {
+      display: block;
+    }
+
+    .target-delta.good {
+      border-color: rgba(44,122,50,0.25);
+      background: #f1fbf4;
+      color: var(--green);
+    }
+
+    .target-delta.warn {
+      border-color: rgba(230,138,46,0.25);
+      background: var(--orange-soft);
+      color: #9a5608;
     }
 
     .blocked-banner {
@@ -655,6 +709,23 @@
       border-radius: var(--radius-md);
       background: linear-gradient(180deg, #f8fce9, #eef8d5);
       color: #5f7b18;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .price-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-minimum {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      background: white;
+      color: var(--blue-dark);
       font-size: 13px;
       font-weight: 800;
     }
@@ -803,6 +874,29 @@
       border-radius: 999px;
       background: rgba(255,255,255,0.78);
     }
+
+    .tier-scale {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tier {
+      padding: 8px 6px;
+      border: 1px solid rgba(13,43,54,0.07);
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.68);
+      color: var(--text-sub);
+      text-align: center;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .tier.danger { color: var(--red); }
+    .tier.ok { color: var(--lime); }
+    .tier.success { color: var(--green); }
 
     .status-msg {
       margin-top: 14px;
@@ -983,8 +1077,13 @@
 
       .segmented,
       .cost-grid,
-      .result-top {
+      .result-top,
+      .price-actions {
         grid-template-columns: 1fr;
+      }
+
+      .tier-scale {
+        grid-template-columns: 1fr 1fr;
       }
 
       .metric.target {
@@ -1037,6 +1136,7 @@
       </div>
 
       <button id="loginBtn" type="button" onclick="login()">Se connecter</button>
+      <button class="login-link" type="button" onclick="resetPassword()">Mot de passe oublié ?</button>
       <p id="loginError" class="login-error"></p>
       <div class="login-footer">Accès réservé aux utilisateurs autorisés</div>
     </div>
@@ -1071,9 +1171,7 @@
 
           <div class="panel-body">
             <div class="field-card">
-              <label class="field-label" for="kwc-custom">
-                Puissance installée en kWc
-              </label>
+              <label class="field-label" for="kwc-custom">Puissance installée en kWc</label>
               <input class="text-input" type="text" id="kwc-custom" placeholder="Ex : 6, 9, 18, 36..." inputmode="decimal" autocomplete="off">
               <p id="kwc-method" class="kwc-method" style="display:none;"></p>
             </div>
@@ -1124,12 +1222,17 @@
                 <input class="text-input" type="text" id="pv-reel" placeholder="Ex : 27 143 €" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
                 <button class="clear-btn" type="button" onclick="clearPV()">✕</button>
               </div>
+
               <div class="price-footer">
                 <div class="floor-card" id="floor-card">Prix minimum autorisé : <strong id="plancher-val">—</strong></div>
+                <div class="target-delta" id="target-delta"></div>
                 <div class="blocked-banner" id="blocked-banner">
                   Prix non autorisé. Il manque <strong id="missing-val">—</strong> pour respecter une marge de 45 %.
                 </div>
-                <button class="btn-cible" type="button" onclick="resetPV()">Revenir au Prix de Vente cible</button>
+                <div class="price-actions">
+                  <button class="btn-minimum" type="button" onclick="setPVMinimum()">Mettre au prix minimum</button>
+                  <button class="btn-cible" type="button" onclick="resetPV()">Revenir au prix cible</button>
+                </div>
               </div>
             </div>
           </div>
@@ -1194,6 +1297,26 @@
         })
         .finally(() => {
           setLoginLoading(false);
+        });
+    }
+
+    function resetPassword() {
+      const email = document.getElementById("email").value.trim();
+      const error = document.getElementById("loginError");
+
+      error.innerText = "";
+
+      if (!email) {
+        error.innerText = "Renseignez votre email pour recevoir le lien de réinitialisation.";
+        return;
+      }
+
+      auth.sendPasswordResetEmail(email)
+        .then(() => {
+          error.innerText = "Email de réinitialisation envoyé.";
+        })
+        .catch(() => {
+          error.innerText = "Impossible d’envoyer le lien. Vérifiez l’email saisi.";
         });
     }
 
@@ -1395,8 +1518,13 @@
       document.getElementById('plancher-val').textContent = fmt(curPlancher);
       document.getElementById('floor-card').classList.add('show');
 
-      kwcMethod.style.display = 'none';
-      kwcMethod.innerHTML = '';
+      if (isCustomKwc) {
+        kwcMethod.style.display = 'block';
+        kwcMethod.innerHTML = `Estimation par produit en croix depuis <strong>${baseReferenceKw} kWc</strong>.`;
+      } else {
+        kwcMethod.style.display = 'none';
+        kwcMethod.innerHTML = '';
+      }
 
       updateSummary();
       compute();
@@ -1478,14 +1606,44 @@
       }
     };
 
+    window.setPVMinimum = function() {
+      if (curPlancher) {
+        pvInput.value = Math.round(curPlancher).toLocaleString('fr-FR');
+        compute();
+      }
+    };
+
     window.clearPV = function() {
       pvInput.value = '';
       compute();
     };
 
+    function updateTargetDelta(pv) {
+      const targetDelta = document.getElementById('target-delta');
+
+      if (!curCible) {
+        targetDelta.className = 'target-delta';
+        targetDelta.textContent = '';
+        return;
+      }
+
+      if (!pv) {
+        targetDelta.className = 'target-delta show';
+        targetDelta.textContent = 'Prix cible recommandé : ' + fmt(curCible);
+        return;
+      }
+
+      const delta = pv - curCible;
+      targetDelta.className = 'target-delta show ' + (delta >= 0 ? 'good' : 'warn');
+      targetDelta.textContent = delta >= 0
+        ? fmt(delta) + ' au-dessus du prix cible.'
+        : fmt(Math.abs(delta)) + ' à ajouter pour atteindre le prix cible.';
+    }
+
     function renderEmpty(message = 'Saisissez une puissance, puis le prix de vente réel.') {
       const body = document.getElementById('result-body');
       body.className = 'result-card';
+      updateTargetDelta(0);
       body.innerHTML = `
         <div class="empty-result">
           <strong>Prêt à simuler</strong>
@@ -1500,6 +1658,7 @@
 
       pvInput.classList.remove('blocked');
       blocked.classList.remove('show');
+      updateTargetDelta(pv);
 
       if (!curPR || !curCible) {
         updateSummary();
@@ -1571,6 +1730,12 @@
         </div>
         <div class="bar-track"><div class="bar-fill" style="width:${barPct}%"></div></div>
         <div class="target-label"><span>Prix de Vente cible ${cibleMC.toFixed(1)} %${bvSelected ? ' + My Smart Battery' : ''}</span></div>
+        <div class="tier-scale">
+          <div class="tier danger">45 %<br>minimum</div>
+          <div class="tier ok">50 %<br>bonne marge</div>
+          <div class="tier success">60 %<br>très bonne</div>
+          <div class="tier success">70 %<br>excellente</div>
+        </div>
         <div class="status-msg">${msg}</div>
         <div class="commission-block ${margeClass}">
           <div>
