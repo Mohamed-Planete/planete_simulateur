@@ -586,12 +586,8 @@
 
     .cost-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-    }
-
-    .metric:not(.target) {
-      display: none;
     }
 
     .metric {
@@ -602,6 +598,7 @@
     }
 
     .metric.target {
+      grid-column: span 2;
       padding: 12px 14px;
       background: white;
       border-color: rgba(124,181,24,0.36);
