@@ -1505,6 +1505,20 @@
         cible: Math.round(data.cible * c)
       };
     }
+  function getFraisCible(kw) {
+      const fraisVtDpConsuel = 600;
+      let bureauControle = 0;
+
+      if (kw >= 50) {
+        bureauControle = 900;
+      } else if (kw >= 36) {
+        bureauControle = 600;
+      } else if (kw >= 15) {
+        bureauControle = 440;
+      }
+
+      return fraisVtDpConsuel + bureauControle;
+    }
 
     function refreshPrices() {
       if (!currentKw || !baseData) return;
@@ -1513,7 +1527,7 @@
       const bv = bvSelected ? (radioTri.checked ? BV.tri : BV.mono) : null;
 
       curPR = data.pr + (bv ? bv.pr : 0);
-      curCible = data.cible + (bv ? bv.pv : 0);
+      curCible = data.mat + data.pose + getFraisCible(currentKw) + (bv ? bv.pv : 0);
       cibleMC = ((curCible - curPR) / curCible) * 100;
       curPlancher = Math.ceil(curPR / (1 - MC_MIN));
 
