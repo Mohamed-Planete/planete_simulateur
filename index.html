@@ -1476,7 +1476,7 @@
         return { data: TARIFS_BASE[kw], baseKw: kw, isCustom: false };
       }
 
-      const lowerKw = keys.filter(k => k < kw).pop();
+      const lowerKw = (kw > 3 && kw < 6) ? 6 : keys.filter(k => k < kw).pop();
       if (!lowerKw) return null;
 
       const base = TARIFS_BASE[lowerKw];
